@@ -75,6 +75,11 @@
     programs.starship.enable = true;
     programs.zellij.enable = true;
     programs.zsh.enable = true;
+    programs.git = {
+      enable = true;
+      userName = "dcronin05";
+      userEmail = "daniel@dcron.in";
+    };
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
