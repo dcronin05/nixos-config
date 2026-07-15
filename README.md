@@ -13,6 +13,19 @@ Follow these commands in the console of your new NixOS VM or physical machine af
 sudo su
 ```
 
+### 1.5 Enable Remote SSH (Recommended for VMs)
+If you are installing on a Hyper-V VM or a device without a keyboard/clipboard, you will need SSH to paste your configuration commands and inject your `keys.txt`.
+```bash
+# Set a temporary password for the root user
+passwd
+
+# Find your IP address
+ip a
+
+# Connect from your host machine:
+# ssh root@<IP_ADDRESS>
+```
+
 ### 2. Download the Automated Installer
 Because the NixOS Minimal ISO does not ship with `git`, we will pull it in using `nix-shell` to clone this repository into a temporary RAM disk directory.
 
