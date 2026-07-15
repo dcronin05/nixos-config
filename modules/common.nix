@@ -67,6 +67,7 @@
   # Home Manager Configuration
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
+  home-manager.backupFileExtension = "backup"; # Silently backup conflicting files instead of throwing clobber errors
   home-manager.users.dcronin05 = { pkgs, ... }: {
     home.stateVersion = "24.05";
     
