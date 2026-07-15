@@ -67,6 +67,9 @@ mkfs.fat -F 32 -n boot "$PART_BOOT"
 # Use -F to forcefully overwrite existing ext4 filesystems without prompting
 mkfs.ext4 -F -L nixos "$PART_ROOT"
 
+echo "==> Waiting for udev to populate disk labels..."
+udevadm settle || sleep 3
+
 echo "==> Mounting partitions..."
 mount /dev/disk/by-label/nixos /mnt
 mkdir -p /mnt/boot
