@@ -8,11 +8,11 @@
 
   outputs = { self, nixpkgs }: {
     nixosConfigurations = {
-      # This matches your networking.hostName
-      nixos = nixpkgs.lib.nixosSystem {
+      nexus = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./configuration.nix
+          ./modules/common.nix
+          ./hosts/nexus.nix
         ];
       };
     };
