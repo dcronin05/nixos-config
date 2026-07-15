@@ -21,6 +21,9 @@ if [[ $confirm != [yY] && $confirm != [yY][eE][sS] ]]; then
   exit 1
 fi
 
+echo "==> Unmounting any existing partitions to prevent device busy errors..."
+umount -R /mnt 2>/dev/null || true
+
 echo "==> Partitioning $DEVICE..."
 parted -s "$DEVICE" -- mklabel gpt
 parted -s "$DEVICE" -- mkpart ESP fat32 1MiB 512MiB
@@ -47,7 +50,8 @@ fi
 
 echo "==> Formatting partitions with hardware-agnostic labels..."
 mkfs.fat -F 32 -n boot "$PART_BOOT"
-mkfs.ext4 -L nixos "$PART_ROOT"
+# Use -F to forcefully overwrite existing ext4 filesystems without prompting
+mkfs.ext4 -F -L nixos "$PART_ROOT"
 
 echo "==> Mounting partitions..."
 mount /dev/disk/by-label/nixos /mnt
