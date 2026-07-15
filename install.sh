@@ -78,6 +78,11 @@ mount /dev/disk/by-label/boot /mnt/boot
 echo "==> Preparing SOPS directory..."
 mkdir -p /mnt/home/dcronin05/.config/sops/age/
 
+# FIX: Because this script runs as root, the .config directory is created as root:root.
+# We MUST chown the entire home directory back to the primary user, otherwise home-manager
+# will crash with a Permission Denied error when trying to install dotfiles during nixos-install!
+chown -R 1000:100 /mnt/home/dcronin05
+
 echo "====================================================="
 echo "SUCCESS: Hardware prepared and mounted at /mnt."
 echo "====================================================="
