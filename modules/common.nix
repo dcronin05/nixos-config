@@ -6,6 +6,10 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable sudo
     shell = pkgs.zsh;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILXLAoRT/mL0V1seGltPF+y2oC4fma96SZz40NI9NGjp dcronin05@debian-vm"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKEe6oeFzP00bx7VSsAf+qxXff8NKhb9DrqqPly0vxdN dcronin05@M4-Mini.attlocal.net"
+    ];
   };
 
   # List packages installed in system profile.
@@ -43,6 +47,11 @@
 
   sops.secrets.github_token = {};
   sops.secrets.tailscale_state = {};
+  sops.secrets.ssh_private_key = {
+    owner = "dcronin05";
+    path = "/home/dcronin05/.ssh/id_ed25519";
+    mode = "0600";
+  };
 
   # Restore Tailscale state on first boot
   systemd.services.tailscaled.preStart = ''
@@ -63,5 +72,6 @@
     programs.starship.enable = true;
     programs.zellij.enable = true;
     programs.zsh.enable = true;
+    programs.ssh.enable = true;
   };
 }
