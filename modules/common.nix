@@ -5,6 +5,7 @@
   users.users.dcronin05 = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable sudo
+    shell = pkgs.zsh;
   };
 
   # List packages installed in system profile.
@@ -18,7 +19,8 @@
     gh
     zip
     unzip
-    tmux
+    zellij
+    sops
   ];
 
   # Enable Tailscale
@@ -32,4 +34,12 @@
 
   # Enable Flakes and the Nix CLI
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Enable Zsh and Starship prompt
+  programs.zsh.enable = true;
+  programs.starship.enable = true;
+
+  # SOPS Secrets Configuration
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.age.keyFile = "/home/dcronin05/.config/sops/age/keys.txt";
 }
