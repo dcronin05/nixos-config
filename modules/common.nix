@@ -19,7 +19,6 @@
     gh
     zip
     unzip
-    zellij
     sops
   ];
 
@@ -35,9 +34,8 @@
   # Enable Flakes and the Nix CLI
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Enable Zsh and Starship prompt
+  # Enable Zsh globally (required for Home Manager zsh integration)
   programs.zsh.enable = true;
-  programs.starship.enable = true;
 
   # SOPS Secrets Configuration
   sops.defaultSopsFile = ../secrets/secrets.yaml;
@@ -54,4 +52,16 @@
       chmod 600 /var/lib/tailscale/tailscaled.state
     fi
   '';
+
+  # Home Manager Configuration
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.users.dcronin05 = { pkgs, ... }: {
+    home.stateVersion = "24.05";
+    
+    # User-level terminal configurations
+    programs.starship.enable = true;
+    programs.zellij.enable = true;
+    programs.zsh.enable = true;
+  };
 }
