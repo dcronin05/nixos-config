@@ -26,6 +26,8 @@
     sops
   ];
 
+  environment.variables.FLAKE = "/home/dcronin05/nixos-config";
+
   # Enable Tailscale
   services.tailscale.enable = true;
 
@@ -73,5 +75,6 @@
     programs.zellij.enable = true;
     programs.zsh.enable = true;
     programs.ssh.enable = true;
+    programs.ssh.enableDefaultConfig = false;
   };
 }
