@@ -77,8 +77,12 @@
     programs.zsh.enable = true;
     programs.git = {
       enable = true;
-      userName = "dcronin05";
-      userEmail = "daniel@dcron.in";
+      settings = {
+        user = {
+          name = "dcronin05";
+          email = "daniel@dcron.in";
+        };
+      };
     };
     programs.direnv = {
       enable = true;
