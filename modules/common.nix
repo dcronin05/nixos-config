@@ -75,6 +75,10 @@
     programs.starship.enable = true;
     programs.zellij.enable = true;
     programs.zsh.enable = true;
+    programs.direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
     programs.ssh.enable = true;
     programs.ssh.enableDefaultConfig = false;
   };
