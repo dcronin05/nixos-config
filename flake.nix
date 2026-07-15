@@ -5,7 +5,6 @@
     # Using the stable 24.05 release channel
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, sops-nix }: {
