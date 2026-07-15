@@ -42,4 +42,16 @@
   # SOPS Secrets Configuration
   sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.age.keyFile = "/home/dcronin05/.config/sops/age/keys.txt";
+
+  sops.secrets.github_token = {};
+  sops.secrets.tailscale_state = {};
+
+  # Restore Tailscale state on first boot
+  systemd.services.tailscaled.preStart = ''
+    mkdir -p /var/lib/tailscale
+    if [ ! -f /var/lib/tailscale/tailscaled.state ]; then
+      cp ${config.sops.secrets.tailscale_state.path} /var/lib/tailscale/tailscaled.state
+      chmod 600 /var/lib/tailscale/tailscaled.state
+    fi
+  '';
 }
