@@ -1,3 +1,18 @@
+<#
+.SYNOPSIS
+    Infrastructure-as-Code (IaC) provisioning script for a NixOS Hyper-V Virtual Machine.
+
+.DESCRIPTION
+    This script automates the creation of a Generation 2 Hyper-V Virtual Machine specifically tailored for NixOS.
+    It exists to standardize the deployment environment and handle several Hyper-V quirks that normally break NixOS:
+    
+    1. Secure Boot: Generation 2 VMs have Secure Boot enabled by default, which rejects the custom NixOS kernel. This script disables it.
+    2. Dynamic Memory: Hyper-V dynamic memory (ballooning) reclaims RAM from idle VMs. However, during a massive Nix Flake evaluation, 
+       the nix-daemon can suddenly request 4GB+ of RAM. If Hyper-V doesn't release the memory fast enough, the Linux kernel suffers 
+       a catastrophic Out-Of-Memory (OOM) lockup. This script enforces static RAM.
+    3. Idempotency & Cleanup: Automatically cleans up ghost VMs and virtual hard disks if a previous run failed.
+#>
+
 # --- Configuration ---
 $VMName = "NixOServer-Test"
 $SwitchName = "External Switch" # Found on your tower host

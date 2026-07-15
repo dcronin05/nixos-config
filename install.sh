@@ -1,4 +1,18 @@
 #!/usr/bin/env bash
+# ==============================================================================
+# BARE-METAL DISASTER RECOVERY INSTALLER
+# ==============================================================================
+# Purpose: This script automates the dangerous and error-prone process of manually 
+#          partitioning and formatting blank drives during a disaster recovery.
+#
+# Hardware-Agnostic Design:
+#          Instead of hardcoding drive paths (like /dev/sda1) in the NixOS config, 
+#          this script specifically formats the partitions with the exact labels 
+#          'nixos' and 'boot'. The NixOS hardware-configuration.nix then mounts 
+#          by label, meaning this exact configuration can be effortlessly deployed 
+#          onto a tiny Raspberry Pi SD card, a massive NVMe drive, or a Hyper-V VM 
+#          without changing a single line of code.
+# ==============================================================================
 set -e
 
 if [ -z "$1" ]; then
