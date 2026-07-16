@@ -24,6 +24,7 @@
     zip
     unzip
     sops
+    tree
   ];
 
   environment.variables.FLAKE = "/home/dcronin05/nixos-config";
