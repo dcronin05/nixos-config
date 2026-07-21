@@ -139,49 +139,49 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
-        extraOptions = {
-          SetEnv = "TERM=xterm-256color";
+        SetEnv = {
+          TERM = "xterm-256color";
         };
       };
       "debian-vm" = {
-        hostname = "100.125.115.8";
-        user = "dcronin05";
+        HostName = "100.125.115.8";
+        User = "dcronin05";
       };
       "tower" = {
-        hostname = "100.79.77.74";
-        user = "dcron";
+        HostName = "100.79.77.74";
+        User = "dcron";
       };
       "macmini" = {
-        hostname = "100.117.198.24";
-        user = "dcronin05";
+        HostName = "100.117.198.24";
+        User = "dcronin05";
       };
       "macbook" = {
-        hostname = "100.76.154.2";
-        user = "dcronin05";
+        HostName = "100.76.154.2";
+        User = "dcronin05";
       };
       "gpantz" = {
-        hostname = "gpantz.castor.usbx.me";
-        user = "gpantz";
+        HostName = "gpantz.castor.usbx.me";
+        User = "gpantz";
       };
       "pxe" = {
-        hostname = "dcron.in";
-        user = "root";
-        port = 2206;
+        HostName = "dcron.in";
+        User = "root";
+        Port = "2206";
       };
       "wsl" = {
-        hostname = "100.79.77.74";
-        user = "dcronin05";
-        port = 2299;
+        HostName = "100.79.77.74";
+        User = "dcronin05";
+        Port = "2299";
       };
       "vps" = {
-        hostname = "162.212.157.166";
-        user = "dcronin05";
+        HostName = "162.212.157.166";
+        User = "dcronin05";
       };
       "nix" = {
-        hostname = "192.168.1.170";
-        user = "dcronin05";
+        HostName = "192.168.1.170";
+        User = "dcronin05";
       };
     };
   };
