@@ -49,21 +49,14 @@
   sops.age.keyFile = "${config.users.users.dcronin05.home}/.config/sops/age/keys.txt";
 
   sops.secrets.github_token = {};
-  sops.secrets.tailscale_state = {};
+
   sops.secrets.ssh_private_key = {
     owner = "dcronin05";
     path = "${config.users.users.dcronin05.home}/.ssh/id_ed25519";
     mode = "0600";
   };
 
-  # Restore Tailscale state on first boot
-  systemd.services.tailscaled.preStart = ''
-    mkdir -p /var/lib/tailscale
-    if [ ! -f /var/lib/tailscale/tailscaled.state ]; then
-      cp ${config.sops.secrets.tailscale_state.path} /var/lib/tailscale/tailscaled.state
-      chmod 600 /var/lib/tailscale/tailscaled.state
-    fi
-  '';
+
 
   # Home Manager Configuration
   home-manager.useGlobalPkgs = true;
