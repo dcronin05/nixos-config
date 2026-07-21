@@ -49,8 +49,6 @@
   sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.age.keyFile = "${config.users.users.dcronin05.home}/.config/sops/age/keys.txt";
 
-  sops.secrets.github_token = {};
-
   sops.secrets.ssh_private_key = {
     owner = "dcronin05";
     path = "${config.users.users.dcronin05.home}/.ssh/id_ed25519";

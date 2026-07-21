@@ -24,13 +24,16 @@
       };
     };
 
-    homeConfigurations = {
-      "dcronin05@laptop" = home-manager.lib.homeManagerConfiguration {
+    homeConfigurations = let
+      mkHome = hostname: home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
-          ./home/laptop.nix
+          sops-nix.homeManagerModules.sops
+          (./home + "/${hostname}.nix")
         ];
       };
+    in {
+      "dcronin05@laptop" = mkHome "laptop";
     };
   };
 }

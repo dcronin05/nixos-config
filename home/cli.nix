@@ -185,4 +185,19 @@
       };
     };
   };
+
+  # SOPS Configuration for User Space
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+  sops.secrets.github_token = {};
+
+  # GitHub CLI and Auto-Authentication
+  programs.gh = {
+    enable = true;
+    gitCredentialHelper.enable = true;
+  };
+
+  # home.activation.ghAuth = config.lib.dag.entryAfter ["sops-nix"] ''
+  #   $DRY_RUN_CMD ${pkgs.gh}/bin/gh auth login --with-token < ${config.sops.secrets.github_token.path}
+  # '';
 }
