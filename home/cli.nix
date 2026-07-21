@@ -25,7 +25,7 @@
       };
       directory = {
         style = "bold #7aa2f7";
-        format = "in [ $path]($style) ";
+        format = "[ $path]($style) ";
         truncation_length = 4;
         truncation_symbol = "…/";
       };
