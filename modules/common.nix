@@ -27,7 +27,7 @@
     tree
   ];
 
-  environment.variables.FLAKE = "/home/dcronin05/nixos-config";
+  environment.variables.FLAKE = "${config.users.users.dcronin05.home}/nixos-config";
 
   # Enable Tailscale
   services.tailscale.enable = true;
@@ -46,13 +46,13 @@
 
   # SOPS Secrets Configuration
   sops.defaultSopsFile = ../secrets/secrets.yaml;
-  sops.age.keyFile = "/home/dcronin05/.config/sops/age/keys.txt";
+  sops.age.keyFile = "${config.users.users.dcronin05.home}/.config/sops/age/keys.txt";
 
   sops.secrets.github_token = {};
   sops.secrets.tailscale_state = {};
   sops.secrets.ssh_private_key = {
     owner = "dcronin05";
-    path = "/home/dcronin05/.ssh/id_ed25519";
+    path = "${config.users.users.dcronin05.home}/.ssh/id_ed25519";
     mode = "0600";
   };
 
