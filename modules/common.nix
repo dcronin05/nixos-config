@@ -9,6 +9,7 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILXLAoRT/mL0V1seGltPF+y2oC4fma96SZz40NI9NGjp debian-vm"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKEe6oeFzP00bx7VSsAf+qxXff8NKhb9DrqqPly0vxdN m4-mini"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIy0Cu8+WCMQt3Qv84SrhaB6WMLKePPiz+8zDMBYWnA0 dcronin05@laptop"
     ];
   };
 
