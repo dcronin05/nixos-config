@@ -69,27 +69,4 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup"; # Silently backup conflicting files instead of throwing clobber errors
-  home-manager.users.dcronin05 = { pkgs, ... }: {
-    home.stateVersion = "24.05";
-    
-    # User-level terminal configurations
-    programs.starship.enable = true;
-    programs.zellij.enable = true;
-    programs.zsh.enable = true;
-    programs.git = {
-      enable = true;
-      settings = {
-        user = {
-          name = "dcronin05";
-          email = "daniel@dcron.in";
-        };
-      };
-    };
-    programs.direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-    programs.ssh.enable = true;
-    programs.ssh.enableDefaultConfig = false;
-  };
 }

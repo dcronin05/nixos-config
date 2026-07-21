@@ -19,6 +19,16 @@
           home-manager.nixosModules.home-manager
           ./modules/common.nix
           ./hosts/nexus.nix
+          { home-manager.users.dcronin05 = import ./home/cli.nix; }
+        ];
+      };
+    };
+
+    homeConfigurations = {
+      "dcronin05@laptop" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        modules = [
+          ./home/laptop.nix
         ];
       };
     };
