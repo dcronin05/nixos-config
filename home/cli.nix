@@ -126,7 +126,7 @@
         email = "daniel@dcron.in";
       };
       safe = {
-        directory = "/home/dcronin05";
+        directory = "${config.home.homeDirectory}";
       };
     };
   };
