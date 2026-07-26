@@ -19,7 +19,12 @@
           home-manager.nixosModules.home-manager
           ./modules/common.nix
           ./hosts/nexus.nix
-          { home-manager.users.dcronin05 = import ./home/cli.nix; }
+          { 
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.sharedModules = [ sops-nix.homeManagerModules.sops ];
+            home-manager.users.dcronin05 = import ./home/cli.nix; 
+          }
         ];
       };
     };
