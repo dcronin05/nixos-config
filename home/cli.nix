@@ -116,7 +116,12 @@
     };
   };
   programs.zellij.enable = true;
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    shellAliases = {
+      nix-gens = "nixos-rebuild list-generations | (read -r header; echo \"$header\"; tac)";
+    };
+  };
   
   programs.git = {
     enable = true;
