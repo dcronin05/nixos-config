@@ -36,10 +36,27 @@
         "type": "github"
       }
     },
+    "nvim-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785132787,
+        "narHash": "sha256-JtxF6c8lMPYTeWiLUcMZ7E/6B+er/hX1S8fK0iha5o4=",
+        "ref": "refs/heads/main",
+        "rev": "ae71849389ab6953262396f5b72aef73070daac3",
+        "revCount": 51,
+        "type": "git",
+        "url": "ssh://git@github.com/dcronin05/nvim-config.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/dcronin05/nvim-config.git"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "nvim-config": "nvim-config",
         "sops-nix": "sops-nix"
       }
     },

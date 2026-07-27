@@ -9,7 +9,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nvim-config = {
-      url = "github:dcronin05/nvim-config";
+      url = "git+ssh://git@github.com/dcronin05/nvim-config.git";
       flake = false;
     };
   };
