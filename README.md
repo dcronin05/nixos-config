@@ -4,6 +4,37 @@ This repository contains a fully declarative, hardware-agnostic, and SOPS-encryp
 
 Because secrets are encrypted with `sops-nix` and the hardware configuration uses disk labels instead of hardcoded UUIDs, this repository is 100% public and can be instantly deployed to any piece of hardware for a true bare-metal restore.
 
+## Architecture
+
+### Layered home-manager modules
+
+`home/` is composed in layers, so any host — full NixOS or standalone home-manager, CLI-only or with a desktop — pulls in only what applies to it:
+
+- `home/cli.nix` — base layer, always imported. Shell, git, ssh, starship, etc.
+- `home/desktop.nix` — GUI-only bits (currently just Ghostty). Only imported by hosts with a desktop.
+- `home/neovim.nix` — the editor, wired to the `nvim-config` flake input (see below). Only imported by hosts that should get it.
+- `home/<hostname>.nix` — the actual per-host entry point (`home/nexus.nix`, `home/laptop.nix`), which just `imports` whichever of the above apply, plus `home.username`/`home.homeDirectory`/`home.stateVersion`.
+
+`flake.nix` wires each host to its `home/<hostname>.nix` — full-NixOS hosts via `home-manager.users.dcronin05 = import ./home/<hostname>.nix;` inside `nixosConfigurations`, standalone hosts via `homeConfigurations."dcronin05@<hostname>"` using `mkHome`. Adding a new host means: pick which layers it needs, write `home/<hostname>.nix` composing them, and add one line to `flake.nix`.
+
+### Neovim (`nvim-config` input)
+
+Neovim itself and its config come from a separate repo, [`nvim-config`](https://github.com/dcronin05/nvim-config), pulled in as a flake input (`flake = false`, since it's a plain source tree, not a flake):
+
+- `home/neovim.nix` does `xdg.configFile."nvim".source = nvim-config;` (symlinks the config into `~/.config/nvim`) and `home.packages = import "${nvim-config}/nix/packages.nix" { inherit pkgs; };` (installs neovim itself plus every host dependency the config needs — a C compiler, ripgrep, fd, lazygit, node, tree-sitter-cli — declared in that one file inside the `nvim-config` repo).
+- **This is pinned, not live.** `flake.lock` freezes `nvim-config` at a specific commit. Pushing to `nvim-config` on GitHub does nothing here until the lock is bumped:
+  ```bash
+  nix flake lock --update-input nvim-config   # just this input
+  # or: nix flake update                      # everything, bigger/slower rebuild
+  sudo nixos-rebuild switch --flake .#nexus
+  ```
+- A single lock-bump + rebuild picks up **both** config changes and new `nix/packages.nix` dependencies together, since `home.packages` reads that file from the fetched input at build time. The one thing that *wouldn't* be covered this way is a change needing actual NixOS system-level config (a systemd service, kernel module, etc.) rather than a home-manager package — not expected for an editor config, but worth knowing the boundary.
+- On non-Nix machines, `nvim-config` has its own `bootstrap.sh` for the same dependency list via apt/dnf/pacman/brew instead — see that repo's README.
+
+### Passwordless `nixos-rebuild`
+
+`modules/common.nix` has a `security.sudo.extraRules` entry scoping `NOPASSWD` to just `/run/current-system/sw/bin/nixos-rebuild` (the stable system-profile symlink, not a `/nix/store` path, so it survives package updates) — not blanket sudo. Intentional, for iterating on this repo without a password prompt every rebuild.
+
 ## Bare-Metal Disaster Recovery Guide
 
 Follow these commands in the console of your new NixOS VM or physical machine after booting the **NixOS Minimal ISO**.
