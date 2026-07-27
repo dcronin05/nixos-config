@@ -175,7 +175,7 @@
         User = "root";
         Port = "2206";
       };
-      "wsl" = {
+      "tower-wsl" = {
         HostName = "100.79.77.74";
         User = "dcronin05";
         Port = "2299";
