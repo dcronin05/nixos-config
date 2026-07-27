@@ -1,9 +1,6 @@
-{ config, pkgs, nvim-config, ... }:
+{ config, pkgs, ... }:
 
 {
-  xdg.configFile."nvim".source = nvim-config;
-  home.packages = import "${nvim-config}/nix/packages.nix" { inherit pkgs; };
-
   home.stateVersion = "24.05";
   
   # User-level terminal configurations

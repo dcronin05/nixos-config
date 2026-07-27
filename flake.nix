@@ -28,7 +28,7 @@
             home-manager.useUserPackages = true;
             home-manager.sharedModules = [ sops-nix.homeManagerModules.sops ];
             home-manager.extraSpecialArgs = { inherit nvim-config; };
-            home-manager.users.dcronin05 = import ./home/cli.nix; 
+            home-manager.users.dcronin05 = import ./home/nexus.nix;
           }
         ];
       };
