@@ -46,6 +46,21 @@
   # Enable Zsh globally (required for Home Manager zsh integration)
   programs.zsh.enable = true;
 
+  # Allow nixos-rebuild without a password (scoped to just that command, not
+  # blanket sudo). Uses the stable system-profile symlink, not a /nix/store
+  # path, so it survives package updates.
+  security.sudo.extraRules = [
+    {
+      users = [ "dcronin05" ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+  
   # SOPS Secrets Configuration
   sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.age.keyFile = "${config.users.users.dcronin05.home}/.config/sops/age/keys.txt";
