@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nvim-config, ... }:
 
 {
+  xdg.configFile."nvim".source = nvim-config;
+
   home.stateVersion = "24.05";
   
   # User-level terminal configurations

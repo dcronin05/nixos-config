@@ -8,9 +8,13 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nvim-config = {
+      url = "github:dcronin05/nvim-config";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, sops-nix, home-manager }: {
+  outputs = { self, nixpkgs, sops-nix, home-manager, nvim-config }: {
     nixosConfigurations = {
       nexus = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -23,6 +27,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.sharedModules = [ sops-nix.homeManagerModules.sops ];
+            home-manager.extraSpecialArgs = { inherit nvim-config; };
             home-manager.users.dcronin05 = import ./home/cli.nix; 
           }
         ];
@@ -32,6 +37,7 @@
     homeConfigurations = let
       mkHome = hostname: home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = { inherit nvim-config; };
         modules = [
           sops-nix.homeManagerModules.sops
           (./home + "/${hostname}.nix")
