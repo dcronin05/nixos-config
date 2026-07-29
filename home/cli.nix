@@ -15,28 +15,28 @@
       command_timeout = 1000;
       username = {
         show_always = true;
-        style_user = "bold #bb9af7";
-        style_root = "bold #f7768e";
+        style_user = "bold #ae81ff";
+        style_root = "bold #f92672";
         format = "[$user]($style)";
       };
       hostname = {
         ssh_only = false;
-        style = "bold #7dcfff";
+        style = "bold #66d9ef";
         format = "@[$hostname]($style) ";
       };
       directory = {
-        style = "bold #7aa2f7";
+        style = "bold #66d9ef";
         format = "[ $path]($style) ";
         truncation_length = 4;
         truncation_symbol = "…/";
       };
       git_branch = {
         symbol = " ";
-        style = "bold #9ece6a";
+        style = "bold #a6e22e";
         format = "on [$symbol$branch]($style) ";
       };
       git_status = {
-        style = "#9ece6a";
+        style = "#a6e22e";
         format = "([$all_status$ahead_behind]($style) )";
         conflicted = "🏳 ";
         ahead = "⇡ ";
@@ -51,51 +51,51 @@
       };
       python = {
         symbol = " ";
-        style = "bold #e0af68";
+        style = "bold #e6db74";
         format = "via [$symbol$version]($style) ";
       };
       nodejs = {
         symbol = " ";
-        style = "bold #9ece6a";
+        style = "bold #a6e22e";
         format = "via [$symbol$version]($style) ";
       };
       c = {
         symbol = " ";
-        style = "bold #7dcfff";
+        style = "bold #66d9ef";
         format = "via [$symbol$version]($style) ";
       };
       docker_context = {
         symbol = " ";
-        style = "bold #7aa2f7";
+        style = "bold #66d9ef";
         format = "docker [$symbol$context]($style) ";
       };
       memory_usage = {
         disabled = false;
         threshold = -1;
         symbol = "󰍛 ";
-        style = "bold #ff9e64";
+        style = "bold #fd971f";
         format = "using [$symbol$ram]($style) ";
       };
       jobs = {
         symbol = " ";
-        style = "bold #7aa2f7";
+        style = "bold #66d9ef";
         format = "with [$symbol$number suspended]($style) ";
       };
       status = {
         disabled = false;
-        style = "bold #f7768e";
+        style = "bold #f92672";
         format = "exited [$symbol$int]($style) ";
         symbol = "✘ ";
       };
       cmd_duration = {
         min_time = 2000;
-        style = "bold #e0af68";
+        style = "bold #e6db74";
         format = "took [ $duration]($style) ";
       };
       time = {
         disabled = false;
         time_format = "%R";
-        style = "#7aa2f7";
+        style = "#66d9ef";
         format = "at [ $time]($style) ";
       };
       battery = {
@@ -108,8 +108,8 @@
         ];
       };
       character = {
-        success_symbol = "[❯](bold #bb9af7)";
-        error_symbol = "[✗](bold #f7768e)";
+        success_symbol = "[❯](bold #ae81ff)";
+        error_symbol = "[✗](bold #f92672)";
       };
       line_break = {
         disabled = false;
