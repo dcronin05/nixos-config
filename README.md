@@ -17,20 +17,13 @@ All tiers share an identical Universal CLI Environment (Zsh, Starship, Zellij, N
 
 👉 **For a complete breakdown of how the profiles are structured, read the [Architecture Documentation](docs/architecture.md).**
 
-### Neovim (`nvim-config` input) & WezTerm (`wezterm-config` input)
+### Monorepo Dotfiles (Neovim, WezTerm, etc.)
 
-Neovim and WezTerm configurations come from separate repos ([`nvim-config`](https://github.com/dcronin05/nvim-config) and [`wezterm-config`](https://github.com/dcronin05/wezterm-config)), pulled in as flake inputs (`flake = false`):
+This repository uses a strict monorepo approach for dotfiles. Rather than pulling Neovim and WezTerm configurations from separate Git repositories via flake inputs, all configuration is managed directly in the local `dotfiles/` directory.
 
-- `home/neovim.nix` does `xdg.configFile."nvim".source = nvim-config;`
-- `home/wezterm.nix` does `xdg.configFile."wezterm".source = wezterm-config;`
-- **These are pinned by `flake.lock`**. To pull updates from either repository:
-  ```bash
-  nix flake lock --update-input wezterm-config
-  nix flake lock --update-input nvim-config
-  home-manager switch --flake .#dcronin05@macbook
-  ```
-- A single lock-bump + rebuild picks up **both** config changes and new `nix/packages.nix` dependencies together, since `home.packages` reads that file from the fetched input at build time. The one thing that *wouldn't* be covered this way is a change needing actual NixOS system-level config (a systemd service, kernel module, etc.) rather than a home-manager package — not expected for an editor config, but worth knowing the boundary.
-- On non-Nix machines, `nvim-config` has its own `bootstrap.sh` for the same dependency list via apt/dnf/pacman/brew instead — see that repo's README.
+- `home/neovim.nix` wires up Neovim by pulling dependencies from `dotfiles/nvim/nix/packages.nix` and creating symlinks to `dotfiles/nvim`.
+- `home/wezterm.nix` does the same for WezTerm, symlinking `dotfiles/wezterm` directly into `~/.config/wezterm`.
+- **Why?** This eliminates the friction of managing multiple `flake.lock` files, prevents dependency resolution mismatch between repos, and allows atomic, instant updates across the entire environment without waiting on remote fetches.
 
 ### Passwordless `nixos-rebuild`
 
