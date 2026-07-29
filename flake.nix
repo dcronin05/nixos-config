@@ -1,3 +1,24 @@
+# ==============================================================================
+# FLAKE ENTRYPOINT (THE MASTER ARCHITECTURE)
+# ==============================================================================
+# Please maintain this modular structure unless a redesign is explicitly requested.
+# 
+# This flake uses a strict 3-tier modular architecture intentionally designed to 
+# support NixOS Headless Servers, macOS Laptops, and future Graphical NixOS machines.
+# 
+# 1. nixosConfigurations:
+#    - Defines full OS-level builds (e.g. `nexus`).
+#    - Uses `modules/common.nix` for OS-level settings (SSH, Tailscale, Sudo).
+#    - NEVER puts user CLI packages in `common.nix`.
+#
+# 2. homeConfigurations:
+#    - Defines standalone Home Manager setups (e.g. `macbook`, `laptop`).
+#    - Every profile (whether invoked by NixOS or standalone HM) MUST import
+#      `home/base.nix` to guarantee 100% parity of the CLI environment.
+#
+# By keeping Home Manager configurations strictly separated from OS-level 
+# configurations, this codebase remains extremely DRY and infinitely extensible.
+# ==============================================================================
 {
   description = "Cronin NixOS Infrastructure";
 

@@ -6,17 +6,16 @@ Because secrets are encrypted with `sops-nix` and the hardware configuration use
 
 ## Architecture
 
-### Layered home-manager modules
+This repository uses a strict **3-Tier Modular Architecture** to ensure 100% parity across vastly different devices without duplicating code.
 
-`home/` is composed in layers, so any host — full NixOS or standalone home-manager, CLI-only or with a desktop — pulls in only what applies to it:
+The three supported tiers are:
+1. **NixOS Headless Servers** (e.g. `nexus`)
+2. **Standalone Home Manager** (e.g. `macbook` macOS, `laptop` CachyOS, WSL)
+3. **Graphical NixOS Machines** (Future Desktop Linux setups)
 
-- `home/cli.nix` — base layer, always imported. Shell, git, ssh, starship, etc.
-- `home/desktop.nix` — GUI-only bits (currently just Ghostty). Only imported by hosts with a desktop.
-- `home/neovim.nix` — the editor, wired to the `nvim-config` flake input (see below). Only imported by hosts that should get it.
-- `home/wezterm.nix` — WezTerm terminal, wired to the `wezterm-config` flake input (see below).
-- `home/<hostname>.nix` — the actual per-host entry point (`home/nexus.nix`, `home/laptop.nix`), which just `imports` whichever of the above apply, plus `home.username`/`home.homeDirectory`/`home.stateVersion`.
+All tiers share an identical Universal CLI Environment (Zsh, Starship, Zellij, Neovim, and core packages) while strictly isolating OS-level daemon configuration.
 
-`flake.nix` wires each host to its `home/<hostname>.nix` — full-NixOS hosts via `home-manager.users.dcronin05 = import ./home/<hostname>.nix;` inside `nixosConfigurations`, standalone hosts via `homeConfigurations."dcronin05@<hostname>"` using `mkHome`. Adding a new host means: pick which layers it needs, write `home/<hostname>.nix` composing them, and add one line to `flake.nix`.
+👉 **For a complete breakdown of how the profiles are structured, read the [Architecture Documentation](docs/architecture.md).**
 
 ### Neovim (`nvim-config` input) & WezTerm (`wezterm-config` input)
 

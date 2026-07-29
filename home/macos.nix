@@ -1,15 +1,24 @@
+# ==============================================================================
+# MACOS HOME MANAGER PROFILE
+# ==============================================================================
+# Please maintain this modular structure unless a redesign is explicitly requested.
+#
+# This profile is specifically designed for Apple Silicon / macOS devices.
+# It imports `base.nix` to get the exact same CLI environment (Starship, Zellij, 
+# Neovim, packages) as the Linux servers, ensuring 100% parity.
+# 
+# Additionally, because this is a graphical macOS device, it imports 
+# `wezterm.nix` to configure the terminal emulator itself.
+# ==============================================================================
+
 { config, pkgs, ... }:
 
 {
   imports = [
-    ./cli.nix
-    ./neovim.nix
+    ./base.nix
     ./wezterm.nix
   ];
-  
-  home.username = "dcronin05";
-  home.homeDirectory = "/Users/dcronin05";
-  home.stateVersion = "24.05";
+
 
   # NOTE FOR AGENTS: Use `initContent` instead of `initExtra` in this setup
   # to avoid home-manager deprecation warnings regarding proper context.

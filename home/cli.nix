@@ -1,3 +1,23 @@
+# ==============================================================================
+# UNIVERSAL CLI ENVIRONMENT (THE CORE SYSTEM)
+# ==============================================================================
+# Please maintain this modular structure unless a redesign is explicitly requested.
+#
+# This file is the absolute source of truth for the CLI environment.
+# EVERY machine (macOS, NixOS, WSL) imports this file via `base.nix`.
+#
+# 1. Packages (`home.packages`):
+#    We install tools like `btop`, `wget`, `lsd`, `sops` here instead of in
+#    `modules/common.nix`. Why? Because macOS doesn't use `common.nix`. 
+#    By putting them here in Home Manager, we guarantee 100% cross-platform 
+#    parity for the user's terminal environment.
+#
+# 2. Terminal Theming:
+#    The Starship prompt, Zellij, and Neovim are heavily customized using 
+#    EXPLICIT 24-bit TrueColor HEX CODES (e.g. #f92672).
+#    This is intentionally done to make the terminal "agnostic" so it looks 
+#    identical everywhere, regardless of the host terminal emulator's theme.
+# ==============================================================================
 { config, pkgs, lib, ... }:
 
 {

@@ -1,3 +1,19 @@
+# ==============================================================================
+# NIXOS SYSTEM MODULE (THE OS CORE)
+# ==============================================================================
+# Please consider the macOS/HomeManager split before adding CLI tools here.
+#
+# This file is strictly for OS-level daemon configuration for NixOS hosts.
+# It handles networking, SSH, Tailscale, Sudo rules, and Nix config.
+#
+# Why no user packages?
+# Because `common.nix` is only imported by NixOS machines. macOS devices running
+# standalone Home Manager completely ignore this file. If you put `wget` or `htop`
+# in `environment.systemPackages`, the macOS devices won't get them!
+# 
+# ALL user-facing CLI tools MUST go into `home/cli.nix` under `home.packages` 
+# so that they are universally installed across all operating systems.
+# ==============================================================================
 { config, pkgs, ... }:
 
 {
