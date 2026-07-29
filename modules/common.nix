@@ -15,20 +15,6 @@
     ];
   };
 
-  # List packages installed in system profile.
-  environment.systemPackages = with pkgs; [
-    vim
-    wget
-    curl
-    btop
-    htop
-    git
-    gh
-    zip
-    unzip
-    sops
-    tree
-  ];
 
   environment.variables.FLAKE = "${config.users.users.dcronin05.home}/nixos-config";
 

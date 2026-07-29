@@ -3,6 +3,19 @@
 {
   home.stateVersion = "24.05";
   
+  home.packages = with pkgs; [
+    lsd
+    tree
+    vim
+    wget
+    curl
+    btop
+    htop
+    zip
+    unzip
+    sops
+  ];
+  
   # User-level terminal configurations
   programs.starship = {
     enable = true;

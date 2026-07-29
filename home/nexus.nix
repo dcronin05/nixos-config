@@ -4,7 +4,6 @@
   imports = [
     ./cli.nix
     ./neovim.nix
-    ./wezterm.nix
   ];
 
   home.username = "dcronin05";
