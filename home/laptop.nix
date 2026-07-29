@@ -5,6 +5,7 @@
     ./cli.nix
     ./desktop.nix
     ./neovim.nix
+    ./wezterm.nix
   ];
   
   home.username = "dcronin05";

@@ -13,20 +13,22 @@ Because secrets are encrypted with `sops-nix` and the hardware configuration use
 - `home/cli.nix` — base layer, always imported. Shell, git, ssh, starship, etc.
 - `home/desktop.nix` — GUI-only bits (currently just Ghostty). Only imported by hosts with a desktop.
 - `home/neovim.nix` — the editor, wired to the `nvim-config` flake input (see below). Only imported by hosts that should get it.
+- `home/wezterm.nix` — WezTerm terminal, wired to the `wezterm-config` flake input (see below).
 - `home/<hostname>.nix` — the actual per-host entry point (`home/nexus.nix`, `home/laptop.nix`), which just `imports` whichever of the above apply, plus `home.username`/`home.homeDirectory`/`home.stateVersion`.
 
 `flake.nix` wires each host to its `home/<hostname>.nix` — full-NixOS hosts via `home-manager.users.dcronin05 = import ./home/<hostname>.nix;` inside `nixosConfigurations`, standalone hosts via `homeConfigurations."dcronin05@<hostname>"` using `mkHome`. Adding a new host means: pick which layers it needs, write `home/<hostname>.nix` composing them, and add one line to `flake.nix`.
 
-### Neovim (`nvim-config` input)
+### Neovim (`nvim-config` input) & WezTerm (`wezterm-config` input)
 
-Neovim itself and its config come from a separate repo, [`nvim-config`](https://github.com/dcronin05/nvim-config), pulled in as a flake input (`flake = false`, since it's a plain source tree, not a flake):
+Neovim and WezTerm configurations come from separate repos ([`nvim-config`](https://github.com/dcronin05/nvim-config) and [`wezterm-config`](https://github.com/dcronin05/wezterm-config)), pulled in as flake inputs (`flake = false`):
 
-- `home/neovim.nix` does `xdg.configFile."nvim".source = nvim-config;` (symlinks the config into `~/.config/nvim`) and `home.packages = import "${nvim-config}/nix/packages.nix" { inherit pkgs; };` (installs neovim itself plus every host dependency the config needs — a C compiler, ripgrep, fd, lazygit, node, tree-sitter-cli — declared in that one file inside the `nvim-config` repo).
-- **This is pinned, not live.** `flake.lock` freezes `nvim-config` at a specific commit. Pushing to `nvim-config` on GitHub does nothing here until the lock is bumped:
+- `home/neovim.nix` does `xdg.configFile."nvim".source = nvim-config;`
+- `home/wezterm.nix` does `xdg.configFile."wezterm".source = wezterm-config;`
+- **These are pinned by `flake.lock`**. To pull updates from either repository:
   ```bash
-  nix flake lock --update-input nvim-config   # just this input
-  # or: nix flake update                      # everything, bigger/slower rebuild
-  sudo nixos-rebuild switch --flake .#nexus
+  nix flake lock --update-input wezterm-config
+  nix flake lock --update-input nvim-config
+  home-manager switch --flake .#dcronin05@macbook
   ```
 - A single lock-bump + rebuild picks up **both** config changes and new `nix/packages.nix` dependencies together, since `home.packages` reads that file from the fetched input at build time. The one thing that *wouldn't* be covered this way is a change needing actual NixOS system-level config (a systemd service, kernel module, etc.) rather than a home-manager package — not expected for an editor config, but worth knowing the boundary.
 - On non-Nix machines, `nvim-config` has its own `bootstrap.sh` for the same dependency list via apt/dnf/pacman/brew instead — see that repo's README.

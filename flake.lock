@@ -57,7 +57,8 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nvim-config": "nvim-config",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "wezterm-config": "wezterm-config"
       }
     },
     "sops-nix": {
@@ -78,6 +79,22 @@
         "owner": "Mic92",
         "repo": "sops-nix",
         "type": "github"
+      }
+    },
+    "wezterm-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785294238,
+        "narHash": "sha256-K4sWEgzY3EBDjPqIqEcTj23EuLNiitLJa8kVtLbnqM4=",
+        "ref": "refs/heads/main",
+        "rev": "3fa47cdd71b763e00fd21756bff3564901d46100",
+        "revCount": 3,
+        "type": "git",
+        "url": "ssh://git@github.com/dcronin05/wezterm-config.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/dcronin05/wezterm-config.git"
       }
     }
   },

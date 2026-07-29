@@ -11,6 +11,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKEe6oeFzP00bx7VSsAf+qxXff8NKhb9DrqqPly0vxdN m4-mini"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIy0Cu8+WCMQt3Qv84SrhaB6WMLKePPiz+8zDMBYWnA0 dcronin05@laptop"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJWUKt8hEzdM85Twn/Mdg8ISXQykc0bes0aVv5SEsNCp dcronin05-tower-to-nexus"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFXJ/DATZ3wSFzpPFyaYisSS+IyzK3eE0GERWnSmxg3h dcronin05@Daniels-MacBook-Pro.local"
     ];
   };
 
