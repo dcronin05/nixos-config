@@ -119,7 +119,7 @@
   programs.zellij = {
     enable = true;
     settings = {
-      theme = "monokai-dimmed";
+      theme = "dracula";
       themes = {
         monokai-dimmed = {
           fg = "#c5c8c6";
