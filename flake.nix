@@ -35,8 +35,8 @@
     };
 
     homeConfigurations = let
-      mkHome = hostname: home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      mkHome = hostname: system: home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
         extraSpecialArgs = { inherit nvim-config; };
         modules = [
           sops-nix.homeManagerModules.sops
@@ -44,7 +44,8 @@
         ];
       };
     in {
-      "dcronin05@laptop" = mkHome "laptop";
+      "dcronin05@laptop" = mkHome "laptop" "x86_64-linux";
+      "dcronin05@macbook" = mkHome "macbook" "aarch64-darwin";
     };
   };
 }

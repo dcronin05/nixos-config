@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   home.stateVersion = "24.05";
@@ -118,7 +118,7 @@
   programs.zellij.enable = true;
   programs.zsh = {
     enable = true;
-    shellAliases = {
+    shellAliases = lib.optionalAttrs pkgs.stdenv.isLinux {
       nix-gens = "nixos-rebuild list-generations | (read -r header; echo \"$header\"; tac)";
     };
   };
