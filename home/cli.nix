@@ -147,6 +147,9 @@
   programs.git = {
     enable = true;
     settings = {
+      init = {
+        defaultBranch = "main";
+      };
       user = {
         name = "dcronin05";
         email = "daniel@dcron.in";
