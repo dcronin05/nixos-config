@@ -208,8 +208,8 @@
         HostName = "162.212.157.166";
         User = "dcronin05";
       };
-      "nix" = {
-        HostName = "192.168.1.170";
+      "nexus" = {
+        HostName = "100.66.213.97";
         User = "dcronin05";
       };
     };
