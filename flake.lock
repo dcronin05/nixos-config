@@ -36,29 +36,11 @@
         "type": "github"
       }
     },
-    "nvim-config": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1785315432,
-        "narHash": "sha256-VSFl9urVb75bj2nyIPxfc/YnSqCmAzHl/6STFtCXw9w=",
-        "ref": "refs/heads/main",
-        "rev": "05da3657a2b376565ff596530ea646285983510f",
-        "revCount": 62,
-        "type": "git",
-        "url": "ssh://git@github.com/dcronin05/nvim-config.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/dcronin05/nvim-config.git"
-      }
-    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nvim-config": "nvim-config",
-        "sops-nix": "sops-nix",
-        "wezterm-config": "wezterm-config"
+        "sops-nix": "sops-nix"
       }
     },
     "sops-nix": {
@@ -79,22 +61,6 @@
         "owner": "Mic92",
         "repo": "sops-nix",
         "type": "github"
-      }
-    },
-    "wezterm-config": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1785312878,
-        "narHash": "sha256-6wAg08TqKIcZWe09RI28aR+T2yGtqPebYlv3wBQwFrc=",
-        "ref": "refs/heads/main",
-        "rev": "fcfcb92a00db764230384b2f1fe6c93a66a7e0b2",
-        "revCount": 5,
-        "type": "git",
-        "url": "ssh://git@github.com/dcronin05/wezterm-config.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/dcronin05/wezterm-config.git"
       }
     }
   },
