@@ -12,6 +12,7 @@
     settings = {
       format = "$username$hostname$git_branch$git_status$python$nodejs$c$docker_context$memory_usage$jobs$status$cmd_duration$time$battery$line_break$directory$character";
       add_newline = true;
+      command_timeout = 1000;
       username = {
         show_always = true;
         style_user = "bold #bb9af7";
@@ -115,7 +116,27 @@
       };
     };
   };
-  programs.zellij.enable = true;
+  programs.zellij = {
+    enable = true;
+    settings = {
+      theme = "monokai-dimmed";
+      themes = {
+        monokai-dimmed = {
+          fg = "#c5c8c6";
+          bg = "#1e1e1e";
+          black = "#3b3a32";
+          red = "#f92672";
+          green = "#a6e22e";
+          yellow = "#e6db74";
+          blue = "#66d9ef";
+          magenta = "#ae81ff";
+          cyan = "#a1efe4";
+          white = "#f8f8f2";
+          orange = "#fd971f";
+        };
+      };
+    };
+  };
   programs.zsh = {
     enable = true;
     shellAliases = lib.optionalAttrs pkgs.stdenv.isLinux {
