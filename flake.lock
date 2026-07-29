@@ -84,11 +84,11 @@
     "wezterm-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1785312753,
-        "narHash": "sha256-e77cIbpB8tEZ3Y0VidE0JsYnnYxToTblluIXhbnp6f4=",
+        "lastModified": 1785312878,
+        "narHash": "sha256-6wAg08TqKIcZWe09RI28aR+T2yGtqPebYlv3wBQwFrc=",
         "ref": "refs/heads/main",
-        "rev": "7e6485c6c6bdf9425cd91510e2682b6f80f14e33",
-        "revCount": 4,
+        "rev": "fcfcb92a00db764230384b2f1fe6c93a66a7e0b2",
+        "revCount": 5,
         "type": "git",
         "url": "ssh://git@github.com/dcronin05/wezterm-config.git"
       },
