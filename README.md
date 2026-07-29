@@ -40,12 +40,15 @@ Neovim itself and its config come from a separate repo, [`nvim-config`](https://
 Follow these commands in the console of your new NixOS VM or physical machine after booting the **NixOS Minimal ISO**.
 
 ### 1. Elevate Privileges
+
 ```bash
 sudo su
 ```
 
 ### 1.5 Enable Remote SSH (Recommended for VMs)
+
 If you are installing on a Hyper-V VM or a device without a keyboard/clipboard, you will need SSH to paste your configuration commands and inject your `keys.txt`.
+
 ```bash
 # Set a temporary password for the root user
 passwd
@@ -58,6 +61,7 @@ ip a
 ```
 
 ### 2. Download the Automated Installer
+
 Because the NixOS Minimal ISO does not ship with `git`, we will pull it in using `nix-shell` to clone this repository into a temporary RAM disk directory.
 
 ```bash
@@ -70,10 +74,13 @@ cd nixos-config
 ```
 
 ### 3. Run the Automated Partition & Mount Script
+
 This script will safely partition your designated drive (e.g., `/dev/sda` or `/dev/nvme0n1`), format it with the required hardware-agnostic labels (`nixos` and `boot`), and mount it to `/mnt`.
 
-> [!WARNING]
+> \[!WARNING]
+>
 > This command will DESTROY ALL DATA on the target drive.
+
 ```bash
 # Make the script executable and run it against your target drive
 chmod +x install.sh
@@ -81,6 +88,7 @@ chmod +x install.sh
 ```
 
 ### 4. Inject your SOPS Master Key
+
 Because SOPS needs to decrypt `secrets.yaml` during the installation (which contains your Tailscale state and SSH identity), you must inject your backed-up `keys.txt` age key *before* running the install.
 
 ```bash
@@ -92,6 +100,7 @@ chmod 600 /mnt/home/dcronin05/.config/sops/age/keys.txt
 ```
 
 ### 5. Final Installation
+
 Run the installer, targeting the `nexus` flake configuration.
 
 ```bash
@@ -99,6 +108,8 @@ nixos-install --flake .#nexus
 ```
 
 ### 6. Reboot
+
 ```bash
 reboot
 ```
+
