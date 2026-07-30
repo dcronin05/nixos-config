@@ -210,6 +210,8 @@
       "debian-vm" = {
         HostName = "100.125.115.8";
         User = "dcronin05";
+        IdentityFile = "~/.ssh/id_ed25519_debianvm";
+        IdentitiesOnly = true;
       };
       "tower" = {
         HostName = "100.79.77.74";
@@ -244,6 +246,8 @@
       "nexus" = {
         HostName = "100.66.213.97";
         User = "dcronin05";
+        IdentityFile = "~/.ssh/id_ed25519_nexus";
+        IdentitiesOnly = true;
       };
     };
   };
