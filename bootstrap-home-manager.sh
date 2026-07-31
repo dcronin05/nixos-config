@@ -15,7 +15,11 @@ set -e
 
 # `hostname -s` strips the ".local"/domain suffix macOS's mDNS hostname often
 # has, so this matches the bare hostnames used as flake output names
-# (dcronin05@macbook, dcronin05@Tower, etc.) on both platforms.
+# (dcronin05@macbook, dcronin05@forge, etc.) on both platforms.
+#
+# NOTE: this script alone does not enroll a new device in the SSH trust mesh
+# (see lib/trusted-keys.nix) -- that needs the device's own key added to that
+# file, plus every *other* device re-pulling and re-switching to pick it up.
 HOSTNAME=$(hostname -s 2>/dev/null || hostname)
 FLAKE_TARGET="dcronin05@${HOSTNAME}"
 

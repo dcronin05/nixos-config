@@ -1,4 +1,5 @@
-# WezTerm, via the wezterm-config flake input (github.com/dcronin05/wezterm-config).
+# WezTerm, from the monorepo dotfiles/wezterm/ directory (see README.md's
+# "Monorepo Dotfiles" section for why this isn't a separate flake input).
 { config, pkgs, ... }:
 
 {

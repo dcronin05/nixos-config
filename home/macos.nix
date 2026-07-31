@@ -17,6 +17,7 @@
   imports = [
     ./base.nix
     ./wezterm.nix
+    (import ./authorized-keys.nix { })
   ];
 
 

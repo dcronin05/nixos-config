@@ -15,5 +15,6 @@
     ./base.nix
     ./desktop.nix
     ./wezterm.nix
+    (import ./authorized-keys.nix { })
   ];
 }

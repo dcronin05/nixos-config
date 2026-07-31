@@ -3,20 +3,25 @@
 # ==============================================================================
 # Please maintain this modular structure unless a redesign is explicitly requested.
 # 
-# This flake uses a strict 3-tier modular architecture intentionally designed to 
-# support NixOS Headless Servers, macOS Laptops, and future Graphical NixOS machines.
-# 
+# This flake uses a strict 3-tier modular architecture intentionally designed to
+# support NixOS Headless Servers, macOS Laptops, headless/WSL Linux boxes, and
+# future Graphical NixOS machines.
+#
 # 1. nixosConfigurations:
 #    - Defines full OS-level builds (e.g. `nexus`).
 #    - Uses `modules/common.nix` for OS-level settings (SSH, Tailscale, Sudo).
 #    - NEVER puts user CLI packages in `common.nix`.
 #
 # 2. homeConfigurations:
-#    - Defines standalone Home Manager setups (e.g. `macbook`, `laptop`).
+#    - Defines standalone Home Manager setups (e.g. `macbook`, `laptop`, `forge`).
 #    - Every profile (whether invoked by NixOS or standalone HM) MUST import
 #      `home/base.nix` to guarantee 100% parity of the CLI environment.
 #
-# By keeping Home Manager configurations strictly separated from OS-level 
+# ../lib/trusted-keys.nix holds the cross-device SSH trust mesh's canonical
+# key data (see docs/architecture.md) -- pure data, not a module, imported by
+# both nixosConfigurations and homeConfigurations sides.
+#
+# By keeping Home Manager configurations strictly separated from OS-level
 # configurations, this codebase remains extremely DRY and infinitely extensible.
 # ==============================================================================
 {

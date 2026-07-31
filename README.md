@@ -25,6 +25,10 @@ This repository uses a strict monorepo approach for dotfiles. Rather than pullin
 - `home/wezterm.nix` does the same for WezTerm, symlinking `dotfiles/wezterm` directly into `~/.config/wezterm`.
 - **Why?** This eliminates the friction of managing multiple `flake.lock` files, prevents dependency resolution mismatch between repos, and allows atomic, instant updates across the entire environment without waiting on remote fetches.
 
+### Cross-Device SSH Trust Mesh
+
+Every Nix-managed device trusts every other one by default — no hand-adding keys pairwise. One canonical file, `lib/trusted-keys.nix`, holds every device's public key; each host's profile pulls from it (`home/authorized-keys.nix` for Tier 2, `modules/common.nix` directly for `nexus`). See the [Architecture Documentation](docs/architecture.md#cross-device-ssh-trust-mesh-libtrusted-keysnix) for the onboarding checklist and a real gotcha it hit (`sshd`'s `StrictModes` rejecting a `/nix/store`-symlinked `authorized_keys`).
+
 ### Passwordless `nixos-rebuild`
 
 `modules/common.nix` has a `security.sudo.extraRules` entry scoping `NOPASSWD` to just `/run/current-system/sw/bin/nixos-rebuild` (the stable system-profile symlink, not a `/nix/store` path, so it survives package updates) — not blanket sudo. Intentional, for iterating on this repo without a password prompt every rebuild.
