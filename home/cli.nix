@@ -234,7 +234,7 @@
         User = "root";
         Port = "2206";
       };
-      "tower-wsl" = {
+      "forge" = {
         HostName = "100.102.85.118";
         User = "dcronin05";
         Port = "2299";

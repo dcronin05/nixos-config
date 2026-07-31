@@ -62,7 +62,7 @@
       "dcronin05@laptop" = mkHome "laptop" "x86_64-linux";
       "dcronin05@macbook" = mkHome "macos" "aarch64-darwin";
       "dcronin05@M4-Mini" = mkHome "macos" "aarch64-darwin";
-      "dcronin05@Tower" = mkHome "headless" "x86_64-linux";
+      "dcronin05@forge" = mkHome "headless" "x86_64-linux";
     };
   };
 }
