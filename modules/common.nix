@@ -16,18 +16,23 @@
 # ==============================================================================
 { config, pkgs, ... }:
 
+let
+  # Every Nix-managed device's identity (see lib/trusted-keys.nix). nexus
+  # doesn't need to trust itself, and debian-vm isn't part of this mesh yet
+  # (kept as its own separate, hand-added entry below) since it's not a
+  # Nix-managed device.
+  meshKeys = import ../lib/trusted-keys.nix;
+  meshTrust = map (name: meshKeys.${name}) (builtins.attrNames (removeAttrs meshKeys [ "nexus" ]));
+in
+
 {
   # Define a user account.
   users.users.dcronin05 = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable sudo
     shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = [
+    openssh.authorizedKeys.keys = meshTrust ++ [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILXLAoRT/mL0V1seGltPF+y2oC4fma96SZz40NI9NGjp debian-vm"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKEe6oeFzP00bx7VSsAf+qxXff8NKhb9DrqqPly0vxdN m4-mini"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIy0Cu8+WCMQt3Qv84SrhaB6WMLKePPiz+8zDMBYWnA0 dcronin05@laptop"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJWUKt8hEzdM85Twn/Mdg8ISXQykc0bes0aVv5SEsNCp dcronin05-tower-to-nexus"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFXJ/DATZ3wSFzpPFyaYisSS+IyzK3eE0GERWnSmxg3h dcronin05@Daniels-MacBook-Pro.local"
     ];
   };
 

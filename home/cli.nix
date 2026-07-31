@@ -246,8 +246,6 @@
       "nexus" = {
         HostName = "100.66.213.97";
         User = "dcronin05";
-        IdentityFile = "~/.ssh/id_ed25519_nexus";
-        IdentitiesOnly = true;
       };
     };
   };
