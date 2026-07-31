@@ -11,12 +11,11 @@
 
   forge = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJaQa/zzzv2HJypdaNUm/ov0JVAdMCZlCwHCGiawyQth dcronin05@forge";
 
-  # Reused verbatim from modules/common.nix's pre-existing authorizedKeys list --
-  # these look like default `ssh-keygen` comments (user@hostname), suggesting
-  # each of these three already has one general-purpose identity rather than a
-  # key scoped to a specific destination. NOT independently verified against
-  # the actual devices -- confirm this assumption holds before trusting it
-  # blindly if something doesn't connect as expected.
+  # Reused verbatim from modules/common.nix's pre-existing authorizedKeys list.
+  # laptop CONFIRMED 2026-07-31 (forge -> laptop went from password-prompt to
+  # instant key auth after laptop pulled+switched) -- it really is laptop's
+  # general-purpose identity, not scoped to nexus only. macbook/M4-Mini keys
+  # were reused on the same assumption but not yet independently tested.
   laptop  = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIy0Cu8+WCMQt3Qv84SrhaB6WMLKePPiz+8zDMBYWnA0 dcronin05@laptop";
   macbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFXJ/DATZ3wSFzpPFyaYisSS+IyzK3eE0GERWnSmxg3h dcronin05@Daniels-MacBook-Pro.local";
   m4mini  = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKEe6oeFzP00bx7VSsAf+qxXff8NKhb9DrqqPly0vxdN m4-mini";
