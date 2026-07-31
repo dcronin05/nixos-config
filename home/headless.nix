@@ -16,6 +16,7 @@
 {
   imports = [
     ./base.nix
+    (import ./authorized-keys.nix { })
   ];
 
   # win32yank: bridges Neovim's system clipboard ("+y/"+p) to the Windows
