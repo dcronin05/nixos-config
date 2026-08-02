@@ -172,6 +172,16 @@
   };
   programs.zsh = {
     enable = true;
+    envExtra = ''
+      export GEMINI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
+      export GOOGLE_AI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
+    '';
+    initExtra = ''
+      # Source home-manager session variables in non-login shells
+      if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
+        . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      fi
+    '';
     shellAliases = lib.optionalAttrs pkgs.stdenv.isLinux {
       nix-gens = "nixos-rebuild list-generations | (read -r header; echo \"$header\"; tac)";
     };
@@ -254,6 +264,10 @@
   sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
   sops.secrets.github_token = {};
+  sops.secrets.google_ai_api_key = {};
+
+  home.sessionVariables = {
+  };
 
   # GitHub CLI and Auto-Authentication
   programs.gh = {
