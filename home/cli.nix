@@ -68,6 +68,15 @@
       os = {
         disabled = false;
         format = "[$symbol]($style) ";
+        symbols = {
+          Linux = "";
+          CachyOS = "";
+          Ubuntu = "";
+          Macos = "";
+          Arch = "";
+          NixOS = "";
+          Windows = "";
+        };
       };
       directory = {
         style = "bold #66d9ef";
