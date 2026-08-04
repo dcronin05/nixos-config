@@ -55,10 +55,7 @@
       add_newline = true;
       command_timeout = 1000;
       username = {
-        show_always = true;
-        style_user = "bold #ae81ff";
-        style_root = "bold #f92672";
-        format = "[$user]($style)";
+        disabled = true;
       };
       hostname = {
         ssh_only = false;
