@@ -51,16 +51,23 @@
     enableBashIntegration = true;
     
     settings = {
-      format = "$username$hostname$git_branch$git_status$python$nodejs$c$docker_context$memory_usage$jobs$status$cmd_duration$time$battery$line_break$directory$character";
+      format = "$directory$git_branch$git_status$python$nodejs$c$docker_context$memory_usage$jobs$status$cmd_duration$time$battery$line_break$os$username$hostname$character";
       add_newline = true;
       command_timeout = 1000;
       username = {
-        disabled = true;
+        show_always = true;
+        style_user = "bold #ae81ff";
+        style_root = "bold #f92672";
+        format = "[$user]($style)";
       };
       hostname = {
         ssh_only = false;
         style = "bold ${hostColor}";
         format = "@[$hostname]($style) ";
+      };
+      os = {
+        disabled = false;
+        format = "[$symbol]($style) ";
       };
       directory = {
         style = "bold #66d9ef";
