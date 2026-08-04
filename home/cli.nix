@@ -241,8 +241,6 @@
       export GOOGLE_AI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
     '';
     initContent = ''
-      # Ensure local bin is universally in the PATH
-      export PATH="$HOME/.local/bin:$PATH"
 
       # Source home-manager session variables in non-login shells
       if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
