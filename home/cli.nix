@@ -18,7 +18,7 @@
 #    This is intentionally done to make the terminal "agnostic" so it looks 
 #    identical everywhere, regardless of the host terminal emulator's theme.
 # ==============================================================================
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, hostColor ? "#66d9ef", ... }:
 
 {
   home.stateVersion = "24.05";
@@ -47,15 +47,15 @@
       add_newline = true;
       command_timeout = 1000;
       username = {
-        show_always = true;
+        show_always = false;
         style_user = "bold #ae81ff";
         style_root = "bold #f92672";
         format = "[$user]($style)";
       };
       hostname = {
         ssh_only = false;
-        style = "bold #66d9ef";
-        format = "@[$hostname]($style) ";
+        style = "bold ${hostColor}";
+        format = "[$hostname]($style) ";
       };
       directory = {
         style = "bold #66d9ef";
@@ -182,6 +182,10 @@
         . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
       fi
     '';
+    initContent = ''
+      # Enable case-insensitive completion
+      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+    '';
     shellAliases = lib.optionalAttrs pkgs.stdenv.isLinux {
       nix-gens = "nixos-rebuild list-generations | (read -r header; echo \"$header\"; tac)";
     };
@@ -220,7 +224,7 @@
       "debian-vm" = {
         HostName = "100.125.115.8";
         User = "dcronin05";
-        IdentityFile = "~/.ssh/id_ed25519_debianvm";
+        IdentityFile = "~/.ssh/id_ed25519";
         IdentitiesOnly = true;
       };
       "tower" = {
@@ -238,9 +242,11 @@
       "gpantz" = {
         HostName = "gpantz.castor.usbx.me";
         User = "gpantz";
+        IdentityFile = "~/.ssh/id_ed25519";
+        IdentitiesOnly = true;
       };
       "pxe" = {
-        HostName = "dcron.in";
+        HostName = "100.77.245.93";
         User = "root";
         Port = "2206";
       };

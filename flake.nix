@@ -40,6 +40,7 @@
     nixosConfigurations = {
       nexus = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { hostColor = "#fd971f"; }; # Orange for Nexus
         modules = [
           sops-nix.nixosModules.sops
           home-manager.nixosModules.home-manager
@@ -48,6 +49,7 @@
           { 
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { hostColor = "#fd971f"; };
             home-manager.sharedModules = [ sops-nix.homeManagerModules.sops ];
             home-manager.users.dcronin05 = import ./home/nexus.nix;
           }
@@ -56,18 +58,19 @@
     };
 
     homeConfigurations = let
-      mkHome = hostname: system: home-manager.lib.homeManagerConfiguration {
+      mkHome = hostname: hostColor: system: home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
+        extraSpecialArgs = { inherit hostColor; };
         modules = [
           sops-nix.homeManagerModules.sops
           (./home + "/${hostname}.nix")
         ];
       };
     in {
-      "dcronin05@laptop" = mkHome "laptop" "x86_64-linux";
-      "dcronin05@macbook" = mkHome "macos" "aarch64-darwin";
-      "dcronin05@M4-Mini" = mkHome "macos" "aarch64-darwin";
-      "dcronin05@forge" = mkHome "headless" "x86_64-linux";
+      "dcronin05@laptop" = mkHome "laptop" "#66d9ef" "x86_64-linux";  # Blue
+      "dcronin05@macbook" = mkHome "macos" "#a6e22e" "aarch64-darwin"; # Green
+      "dcronin05@M4-Mini" = mkHome "macos" "#e6db74" "aarch64-darwin"; # Yellow
+      "dcronin05@forge" = mkHome "headless" "#f92672" "x86_64-linux";  # Red
     };
   };
 }
