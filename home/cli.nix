@@ -38,11 +38,6 @@
     eternal-terminal
   ];
 
-  # Universal environment variables
-  home.sessionVariables = {
-    LC_ALL = "en_US.UTF-8";
-    LANG = "en_US.UTF-8";
-  };
   
   # User-level terminal configurations
   programs.starship = {
@@ -236,13 +231,12 @@
       export GEMINI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
       export GOOGLE_AI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
     '';
-    initExtra = ''
+    initContent = ''
       # Source home-manager session variables in non-login shells
       if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
         . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
       fi
-    '';
-    initContent = ''
+
       # Enable case-insensitive completion
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
     '';

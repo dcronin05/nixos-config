@@ -20,10 +20,14 @@
     (import ./authorized-keys.nix { })
   ];
 
-  # Fix non-interactive SSH PATH for Mosh/ET (Moshi app support)
+  # Fix non-interactive SSH PATH and locale for Mosh/ET (Moshi app support)
   home.sessionPath = [
     "/opt/homebrew/bin"
   ];
+  home.sessionVariables = {
+    LC_ALL = "en_US.UTF-8";
+    LANG = "en_US.UTF-8";
+  };
 
   # NOTE FOR AGENTS: Use `initContent` instead of `initExtra` in this setup
   # to avoid home-manager deprecation warnings regarding proper context.
