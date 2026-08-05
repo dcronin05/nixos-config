@@ -34,7 +34,15 @@
     zip
     unzip
     sops
+    mosh
+    eternal-terminal
   ];
+
+  # Universal environment variables
+  home.sessionVariables = {
+    LC_ALL = "en_US.UTF-8";
+    LANG = "en_US.UTF-8";
+  };
   
   # User-level terminal configurations
   programs.starship = {
@@ -47,7 +55,7 @@
       add_newline = true;
       command_timeout = 1000;
       username = {
-        show_always = false;
+        show_always = true;
         style_user = "bold #ae81ff";
         style_root = "bold #f92672";
         format = "[$user]($style)";
@@ -55,7 +63,7 @@
       hostname = {
         ssh_only = false;
         style = "bold ${hostColor}";
-        format = "[$hostname]($style) ";
+        format = "@[$hostname]($style) ";
       };
       directory = {
         style = "bold #66d9ef";
@@ -170,6 +178,58 @@
       };
     };
   };
+
+  programs.tmux = {
+    enable = true;
+    clock24 = true;
+    mouse = true;
+    terminal = "tmux-256color";
+    extraConfig = ''
+      # TrueColor Support
+      set -ga terminal-overrides ",*256col*:Tc"
+
+      # Powerline Monokai Dimmed Theme
+      set -g status-style "bg=#1e1e1e,fg=#c5c8c6"
+      
+      # Protect status edges from aggressive mobile truncation
+      set -g status-left-length 100
+      set -g status-right-length 100
+      set -g status-justify right
+      
+      # Define all styles as variables to completely eliminate comma parsing bugs
+      set -g @host_start "#[fg=${hostColor},bg=#1e1e1e]#[fg=#1e1e1e,bg=${hostColor},bold] "
+      set -g @host_end " #[fg=${hostColor},bg=#1e1e1e]"
+      
+      set -g @session_start " #[fg=#a6e22e,bg=#1e1e1e]#[fg=#1e1e1e,bg=#a6e22e,bold] "
+      set -g @session_end " #[fg=#a6e22e,bg=#1e1e1e] "
+      
+      set -g @dot "#[fg=#555555,bg=#1e1e1e]•"
+      set -g @pill_start "#[fg=#3b3a32,bg=#1e1e1e]#[fg=#c5c8c6,bg=#3b3a32] "
+      set -g @pill_end " #[fg=#3b3a32,bg=#1e1e1e]"
+      
+      set -g @pill_cur_start "#[fg=#66d9ef,bg=#1e1e1e]#[fg=#1e1e1e,bg=#66d9ef,bold] "
+      set -g @pill_cur_end " #[fg=#66d9ef,bg=#1e1e1e]"
+      
+      # Status Left (Host Name + Dynamic Session Name)
+      set -g status-left "#{@host_start}#{=/10/…/:host_short}#{@host_end}#{@session_start}#{?#{e|<:#{client_width},#{e|+:60,#{e|*:13,#{session_windows}}}},#{=/10/…/:session_name},#{session_name}}#{@session_end}"
+
+      # Window Tabs (Dynamic: Dots -> Truncated Pills -> Full Pills)
+      set -g window-status-separator " "
+      set -g window-status-format "#{?#{e|<:#{client_width},#{e|+:30,#{e|*:13,#{session_windows}}}},#{@dot},#{@pill_start}#I:#{?#{e|<:#{client_width},#{e|+:40,#{e|*:13,#{session_windows}}}},#{=/10/…/:window_name},#{window_name}}#{@pill_end}}"
+      set -g window-status-current-format "#{@pill_cur_start}#I:#{?#{e|<:#{client_width},#{e|+:40,#{e|*:13,#{session_windows}}}},#{=/10/…/:window_name},#{window_name}}#{@pill_cur_end}"
+      
+      # Status Right (Empty, user relies on prompt clock)
+      set -g status-right ""
+      
+      # Minimal borders
+      set -g pane-border-style "fg=#3b3a32"
+      set -g pane-active-border-style "fg=#66d9ef"
+      
+      # Mobile toggle hotkey (Prefix + b)
+      bind-key b set-option status
+    '';
+  };
+
   programs.zsh = {
     enable = true;
     envExtra = ''

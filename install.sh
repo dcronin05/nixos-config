@@ -15,9 +15,9 @@
 # ==============================================================================
 set -e
 
-if [ -z "$1" ]; then
-  echo "Usage: $0 <block-device>"
-  echo "Example: $0 /dev/sda"
+if [ -z "$2" ]; then
+  echo "Usage: $0 <block-device> <hostname>"
+  echo "Example: $0 /dev/sda nexus"
   echo ""
   echo "Available block devices:"
   lsblk -d -n -o NAME,SIZE,MODEL | grep -v loop
@@ -25,6 +25,7 @@ if [ -z "$1" ]; then
 fi
 
 DEVICE=$1
+TARGET_HOST=$2
 
 echo "=========================================="
 echo "WARNING: This will DESTROY ALL DATA on $DEVICE."
@@ -93,5 +94,5 @@ echo "   nano /mnt/home/dcronin05/.config/sops/age/keys.txt"
 echo "   chmod 600 /mnt/home/dcronin05/.config/sops/age/keys.txt"
 echo ""
 echo "2. Run the NixOS Installer:"
-echo "   nixos-install --flake .#nexus"
+echo "   nixos-install --flake .#$TARGET_HOST"
 echo "====================================================="

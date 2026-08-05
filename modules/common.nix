@@ -45,6 +45,10 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  # Enable Moshi resilient connection backends (Firewall & Daemons)
+  programs.mosh.enable = true;
+  services.eternal-terminal.enable = true;
+
   # Enable nix-ld (for VSCode Remote-SSH)
   programs.nix-ld.enable = true;
 

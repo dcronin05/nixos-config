@@ -65,3 +65,10 @@ if [[ "$(uname -s)" == "Linux" ]]; then
     echo ""
   fi
 fi
+
+# 4. Optional Moshi Setup
+echo ""
+echo "NOTE: If you use the Moshi app and want Live Activities on this device,"
+echo "run the following command once you are inside the new environment:"
+echo "  moshi-hook install"
+echo ""
