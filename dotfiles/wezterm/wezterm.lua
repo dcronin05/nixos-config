@@ -41,11 +41,42 @@ config.window_padding = {
 config.initial_cols = 100
 config.initial_rows = 35
 
+-- 3. WezTerm Native Multiplexer & Unix Domain Setup
+config.unix_domains = {
+  {
+    name = "unix",
+  },
+}
+
+-- Leader key setup (Ctrl + a)
+config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+
+config.keys = {
+  -- Split Panes (Leader + d = down, Leader + r = right, Leader + " / %)
+  { key = "%", mods = "LEADER|SHIFT", action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
+  { key = '"', mods = "LEADER|SHIFT", action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
+  { key = "d", mods = "LEADER", action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
+  { key = "r", mods = "LEADER", action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
+
+  -- Move Pane Focus (Leader + hjkl)
+  { key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Left" },
+  { key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Right" },
+  { key = "j", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Down" },
+  { key = "k", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Up" },
+
+  -- Tab & Window Management
+  { key = "c", mods = "LEADER", action = wezterm.action.SpawnTab "CurrentPaneDomain" },
+  { key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane { confirm = true } },
+
+  -- Workspace & Multiplexer Domain Launcher Menu
+  { key = "w", mods = "LEADER", action = wezterm.action.ShowLauncherArgs { flags = "FUZZY|WORKSPACES|DOMAINS" } },
+}
+
 -- Powerline Glyphs
 local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
 local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
 
--- 3. Custom Tab Bar Title Formatting (Zellij Powerline Slants)
+-- 4. Custom Tab Bar Title Formatting (Zellij Powerline Slants)
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
   local is_first = (tab.tab_index == 0)
   local is_last = (tab.tab_index == #tabs - 1)
@@ -102,7 +133,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
   return res
 end)
 
--- 4. Right Status Bar (Zellij Host / Status Pill)
+-- 5. Right Status Bar (Zellij Host / Status Pill)
 wezterm.on("update-status", function(window, pane)
   local hostname = wezterm.hostname():match("^([^.]+)") or wezterm.hostname()
   
