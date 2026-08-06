@@ -268,20 +268,29 @@
 
       # Set terminal tab title to current directory when idle
       set_tab_title_precmd() {
-        if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
-          print -Pn "\e]0;%~\a"
+        local formatted_dir
+        formatted_dir=$(print -Pn "%~")
+        if [[ -n "$TMUX" ]]; then
+          print -Pn "\e]0;$formatted_dir\a"
+        elif [[ -n "$ZELLIJ" ]]; then
+          print -Pn "\e]0;$formatted_dir\a"
+          command zellij action rename-tab "$formatted_dir" 2>/dev/null || true
         else
-          print -Pn "\e]0;[%m] %~\a"
+          print -Pn "\e]0;[%m] $formatted_dir\a"
         fi
       }
       precmd_functions+=(set_tab_title_precmd)
 
       # Set terminal tab title to the running command
       set_tab_title_preexec() {
-        if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
-          print -Pn "\e]0;$1\a"
+        local cmd="$1"
+        if [[ -n "$TMUX" ]]; then
+          print -Pn "\e]0;$cmd\a"
+        elif [[ -n "$ZELLIJ" ]]; then
+          print -Pn "\e]0;$cmd\a"
+          command zellij action rename-tab "$cmd" 2>/dev/null || true
         else
-          print -Pn "\e]0;[%m] $1\a"
+          print -Pn "\e]0;[%m] $cmd\a"
         fi
       }
       preexec_functions+=(set_tab_title_preexec)
