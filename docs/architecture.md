@@ -43,12 +43,12 @@ The `flake.nix` file strictly separates `nixosConfigurations` (which build the w
 
 ## Cross-Device SSH Trust Mesh (`lib/trusted-keys.nix`)
 Every Nix-managed device trusts every other Nix-managed device by default, without hand-adding keys pairwise. One canonical file, `lib/trusted-keys.nix`, holds pure data — one SSH public key per device, no policy. Each host's profile decides which subset of that list it actually trusts:
-- **Tier 1 (`nexus`)**: `modules/common.nix` maps the list into `users.users.dcronin05.openssh.authorizedKeys.keys` directly (a plain NixOS option) — plus one hand-added, non-mesh entry for `debian-vm`, which isn't a Nix-managed device.
+- **Tier 1 (`nexus`)**: `modules/common.nix` maps the list into `users.users.dcronin05.openssh.authorizedKeys.keys` directly (a plain NixOS option).
 - **Tier 2 (standalone Home Manager)**: `home/authorized-keys.nix` is a reusable function — `(import ./authorized-keys.nix { })` trusts every device in `lib/trusted-keys.nix` by default; passing an explicit `trust = [ "nexus" ]` list lets one host diverge without touching the shared file or any other host. Every Tier 2 host profile (`headless.nix`, `laptop.nix`, `macos.nix`) imports this.
 
 **Important implementation detail:** the Tier 2 helper deliberately does **not** use `home.file` for `~/.ssh/authorized_keys` — that symlinks into `/nix/store`, and `sshd`'s `StrictModes` check walks the *entire* resolved path chain, rejecting authentication with `bad ownership or modes for directory /nix/store` (the store is necessarily world-writable-with-sticky-bit for Nix itself to function). NixOS's own `openssh` module sidesteps this by keeping authorized keys outside `$HOME` entirely; standalone Home Manager has no such option, so `authorized-keys.nix` instead uses a `home.activation` hook to copy a real, regular, correctly-permissioned (`0600`) file into place.
 
-**Each device has exactly one identity**, used for everything it does — not a key per destination. `debian-vm` and `gpantz` are intentionally excluded from `lib/trusted-keys.nix` for now: `debian-vm` isn't a Nix-managed device, and `gpantz` was never confirmed to have working SSH access from any device yet.
+**Each device has exactly one identity**, used for everything it does — not a key per destination. `gpantz` is intentionally excluded from `lib/trusted-keys.nix` for now: `gpantz` was never confirmed to have working SSH access from any device yet.
 
 **Onboarding a new device to the mesh:**
 1. Generate one keypair on the new device (`ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519`) — this becomes its one identity.

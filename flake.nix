@@ -71,6 +71,7 @@
       "dcronin05@macbook" = mkHome "macos" "#a6e22e" "aarch64-darwin"; # Green
       "dcronin05@M4-Mini" = mkHome "macos" "#e6db74" "aarch64-darwin"; # Yellow
       "dcronin05@forge" = mkHome "headless" "#f92672" "x86_64-linux";  # Red
+      "dcronin05@debian-vm" = mkHome "headless" "#ae81ff" "x86_64-linux"; # Purple
     };
   };
 }

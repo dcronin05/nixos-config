@@ -3,13 +3,13 @@
 # which subset of these it actually trusts (see home/authorized-keys.nix for
 # the Tier 2 helper, modules/common.nix for Tier 1/nexus).
 #
-# Deliberately scoped to Nix-managed devices only for now (debian-vm is a
-# separate, non-Nix machine and isn't part of this mesh yet). One key per
-# device, used for everything that device does -- not scoped per-destination.
+# One key per device, used for everything that device does -- not scoped per-destination.
 {
   nexus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPLK21gBMX/VEf6xq7kGywRgcxPjxVe2gsDz16WoxlTQ dcronin05@nexus";
 
   forge = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJaQa/zzzv2HJypdaNUm/ov0JVAdMCZlCwHCGiawyQth dcronin05@forge";
+
+  debian-vm = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILXLAoRT/mL0V1seGltPF+y2oC4fma96SZz40NI9NGjp dcronin05@debian-vm";
 
   # Reused verbatim from modules/common.nix's pre-existing authorizedKeys list.
   # laptop CONFIRMED 2026-07-31 (forge -> laptop went from password-prompt to

@@ -18,9 +18,7 @@
 
 let
   # Every Nix-managed device's identity (see lib/trusted-keys.nix). nexus
-  # doesn't need to trust itself, and debian-vm isn't part of this mesh yet
-  # (kept as its own separate, hand-added entry below) since it's not a
-  # Nix-managed device.
+  # doesn't need to trust itself.
   meshKeys = import ../lib/trusted-keys.nix;
   meshTrust = map (name: meshKeys.${name}) (builtins.attrNames (removeAttrs meshKeys [ "nexus" ]));
 in
@@ -31,9 +29,7 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable sudo
     shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = meshTrust ++ [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILXLAoRT/mL0V1seGltPF+y2oC4fma96SZz40NI9NGjp debian-vm"
-    ];
+    openssh.authorizedKeys.keys = meshTrust;
   };
 
 
