@@ -47,6 +47,7 @@ config.unix_domains = {
     name = "unix",
   },
 }
+config.default_gui_startup_args = { "connect", "unix" }
 
 -- Leader key setup (Ctrl + a)
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
