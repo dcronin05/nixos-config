@@ -232,11 +232,6 @@
       
       # Status Right (Empty, user relies on prompt clock)
       set -g status-right ""
-
-      # Add a tiny buffer line ABOVE the status bar (between apps and Tmux)
-      set -g status 2
-      run-shell "tmux set-option -g status-format[1] \"\$(tmux show-option -gqv status-format[0])\""
-      set -g status-format[0] ""
       
       # Minimal borders
       set -g pane-border-style "fg=#3b3a32"
