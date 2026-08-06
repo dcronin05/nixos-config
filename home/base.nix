@@ -22,6 +22,7 @@
   imports = [
     ./cli.nix
     ./neovim.nix
+    ./moshi.nix
   ];
 
   home = {

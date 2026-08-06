@@ -17,6 +17,11 @@
 #    EXPLICIT 24-bit TrueColor HEX CODES (e.g. #f92672).
 #    This is intentionally done to make the terminal "agnostic" so it looks 
 #    identical everywhere, regardless of the host terminal emulator's theme.
+#
+# 3. Universal Background Automations:
+#    While `cli.nix` exports universal PATHs (like `~/.local/bin`), proprietary 
+#    binaries like `moshi-hook` are extracted into their own modules (e.g. `moshi.nix`)
+#    and imported by `base.nix` to keep this file purely declarative.
 # ==============================================================================
 { config, pkgs, lib, hostColor ? "#66d9ef", ... }:
 
@@ -341,13 +346,4 @@
   # home.activation.ghAuth = config.lib.dag.entryAfter ["sops-nix"] ''
   #   $DRY_RUN_CMD ${pkgs.gh}/bin/gh auth login --with-token < ${config.sops.secrets.github_token.path}
   # '';
-
-  # Universal moshi-hook installation
-  home.activation.moshiHook = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    MOSHI_HOOK="$HOME/.local/bin/moshi-hook"
-    if [ ! -x "$MOSHI_HOOK" ]; then
-      $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "$HOME/.local/bin"
-      $DRY_RUN_CMD ${pkgs.curl}/bin/curl -fsSL https://getmoshi.app/install.sh | $DRY_RUN_CMD sh
-    fi
-  '';
 }

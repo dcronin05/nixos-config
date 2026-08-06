@@ -7,6 +7,10 @@
 # etc. Installs Nix if missing, then runs `home-manager switch` against this
 # machine's flake output (dcronin05@<hostname>).
 #
+# NOTE: This script is a true 1-click installer. It uses Home Manager activation 
+# hooks to silently fetch and install proprietary binaries (like `moshi-hook`) 
+# in the background without manual intervention.
+#
 # NOT for bare-metal NixOS installs -- use install.sh for that instead. This
 # script never partitions or formats anything; it only touches Nix's own
 # store/profile and your dotfiles (with automatic backups on conflict).

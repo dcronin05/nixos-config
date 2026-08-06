@@ -1,9 +1,10 @@
 # Neovim, from the monorepo dotfiles/nvim/ directory (originally its own
 # repo, github.com/dcronin05/nvim-config, absorbed here to avoid managing a
 # separate flake.lock -- see README.md's "Monorepo Dotfiles" section).
-# Import this alongside cli.nix on any host that should get the editor —
-# it's kept as its own layer (not folded into cli.nix) so a minimal/headless
-# host can opt out without touching the rest of the CLI setup.
+# 
+# While this module is extracted into its own file to keep `cli.nix` from 
+# becoming bloated, it is imported universally by `base.nix` so that every 
+# single machine (macOS, NixOS, WSL) gets the exact same Neovim environment.
 { config, pkgs, ... }:
 
 {

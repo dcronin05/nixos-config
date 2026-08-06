@@ -2,8 +2,13 @@
 # STANDALONE DAEMONS MODULE
 # ==============================================================================
 # This module is imported by standalone Home Manager profiles (macOS, WSL, CachyOS).
-# It defines user-level background daemons that are otherwise handled system-wide
-# by NixOS.
+# It defines user-level background daemons (like `etserver`) that are otherwise 
+# handled system-wide by NixOS in `modules/common.nix`.
+# 
+# Why don't we put this in `cli.nix` universally?
+# Because NixOS already binds `etserver` to TCP port 2022 as `root`. If we ran 
+# a universal user-level daemon, it would crash on NixOS due to port conflicts.
+# This file provides a DRY solution for non-NixOS environments to get daemons.
 # ==============================================================================
 
 { config, pkgs, lib, ... }:
