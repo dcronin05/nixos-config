@@ -252,6 +252,7 @@
   programs.zsh = {
     enable = true;
     envExtra = ''
+      export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
       export GEMINI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
       export GOOGLE_AI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
     '';
