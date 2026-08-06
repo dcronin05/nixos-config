@@ -44,14 +44,7 @@ config.window_padding = {
 config.initial_cols = 100
 config.initial_rows = 35
 
--- 3. WezTerm Native Multiplexer & Unix Domain Setup
-config.unix_domains = {
-  {
-    name = "unix",
-  },
-}
-config.default_gui_startup_args = { "connect", "unix" }
-
+-- 3. Keybindings
 -- Leader key setup (Ctrl + a)
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 
