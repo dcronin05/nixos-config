@@ -270,11 +270,8 @@
       set_tab_title_precmd() {
         local formatted_dir
         formatted_dir=$(print -Pn "%~")
-        if [[ -n "$TMUX" ]]; then
+        if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
           print -Pn "\e]0;$formatted_dir\a"
-        elif [[ -n "$ZELLIJ" ]]; then
-          print -Pn "\e]0;$formatted_dir\a"
-          command zellij action rename-tab "$formatted_dir" 2>/dev/null || true
         else
           print -Pn "\e]0;[%m] $formatted_dir\a"
         fi
@@ -284,11 +281,8 @@
       # Set terminal tab title to the running command
       set_tab_title_preexec() {
         local cmd="$1"
-        if [[ -n "$TMUX" ]]; then
+        if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
           print -Pn "\e]0;$cmd\a"
-        elif [[ -n "$ZELLIJ" ]]; then
-          print -Pn "\e]0;$cmd\a"
-          command zellij action rename-tab "$cmd" 2>/dev/null || true
         else
           print -Pn "\e]0;[%m] $cmd\a"
         fi
