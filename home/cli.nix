@@ -265,6 +265,14 @@
 
       # Enable case-insensitive completion
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+      # Set terminal tab title to current directory (unless in tmux or zellij)
+      set_tab_title() {
+        if [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
+          print -Pn "\e]0;%~\a"
+        fi
+      }
+      precmd_functions+=(set_tab_title)
     '';
     shellAliases = lib.optionalAttrs pkgs.stdenv.isLinux {
       nix-gens = "nixos-rebuild list-generations | (read -r header; echo \"$header\"; tac)";
