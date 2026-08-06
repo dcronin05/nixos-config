@@ -266,18 +266,21 @@
       # Enable case-insensitive completion
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
-      # Set terminal tab title to current directory when idle (unless in tmux/zellij)
+      # Set terminal tab title to current directory when idle
       set_tab_title_precmd() {
-        if [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
+        if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
+          print -Pn "\e]0;%~\a"
+        else
           print -Pn "\e]0;[%m] %~\a"
         fi
       }
       precmd_functions+=(set_tab_title_precmd)
 
-      # Set terminal tab title to the running command (unless in tmux/zellij)
+      # Set terminal tab title to the running command
       set_tab_title_preexec() {
-        if [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
-          # $1 contains the raw command line string about to be executed
+        if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
+          print -Pn "\e]0;$1\a"
+        else
           print -Pn "\e]0;[%m] $1\a"
         fi
       }
