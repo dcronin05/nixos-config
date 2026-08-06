@@ -24,7 +24,10 @@ config.colors = {
 }
 
 -- 2. macOS Window Styling & Integrated Titlebar
+config.native_macos_fullscreen_mode = true
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+config.integrated_title_button_style = "Windows"
+config.integrated_title_buttons = {}
 config.window_frame = {
   font_size = 13.0,
   active_titlebar_bg = TAB_BAR_BG,
@@ -71,6 +74,9 @@ config.keys = {
 
   -- Workspace & Multiplexer Domain Launcher Menu
   { key = "w", mods = "LEADER", action = wezterm.action.ShowLauncherArgs { flags = "FUZZY|WORKSPACES|DOMAINS" } },
+
+  -- Fullscreen (macOS standard)
+  { key = "f", mods = "CTRL|CMD", action = wezterm.action.ToggleFullScreen },
 }
 
 -- Powerline Glyphs
