@@ -341,4 +341,13 @@
   # home.activation.ghAuth = config.lib.dag.entryAfter ["sops-nix"] ''
   #   $DRY_RUN_CMD ${pkgs.gh}/bin/gh auth login --with-token < ${config.sops.secrets.github_token.path}
   # '';
-  systemd.user.services.dummy = { Unit.Description = "Dummy"; }; }
+
+  # Universal moshi-hook installation
+  home.activation.moshiHook = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    MOSHI_HOOK="$HOME/.local/bin/moshi-hook"
+    if [ ! -x "$MOSHI_HOOK" ]; then
+      $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "$HOME/.local/bin"
+      $DRY_RUN_CMD ${pkgs.curl}/bin/curl -fsSL https://getmoshi.app/install.sh | $DRY_RUN_CMD sh
+    fi
+  '';
+}
