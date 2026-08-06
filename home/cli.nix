@@ -263,6 +263,15 @@
         . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
       fi
 
+      # Auto-brand Zellij sessions with the hostname
+      if [[ -n "$ZELLIJ" && -n "$ZELLIJ_SESSION_NAME" ]]; then
+        local current_host="[$(print -Pn "%m")]"
+        if [[ "$ZELLIJ_SESSION_NAME" != "$current_host"* ]]; then
+          command zellij action rename-session "$current_host $ZELLIJ_SESSION_NAME" 2>/dev/null || true
+          export ZELLIJ_SESSION_NAME="$current_host $ZELLIJ_SESSION_NAME"
+        fi
+      fi
+
       # Enable case-insensitive completion
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
