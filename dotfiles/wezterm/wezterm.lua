@@ -56,11 +56,14 @@ config.default_gui_startup_args = { "connect", "unix" }
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 
 config.keys = {
-  -- Split Panes (Leader + d = down, Leader + r = right, Leader + " / %)
-  { key = "%", mods = "LEADER|SHIFT", action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
-  { key = '"', mods = "LEADER|SHIFT", action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
-  { key = "d", mods = "LEADER", action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
-  { key = "r", mods = "LEADER", action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
+  -- Split Panes (Directional)
+  { key = "H", mods = "LEADER|SHIFT", action = wezterm.action.SplitPane { direction = "Left", size = { Percent = 50 } } },
+  { key = "L", mods = "LEADER|SHIFT", action = wezterm.action.SplitPane { direction = "Right", size = { Percent = 50 } } },
+  { key = "J", mods = "LEADER|SHIFT", action = wezterm.action.SplitPane { direction = "Down", size = { Percent = 50 } } },
+  { key = "K", mods = "LEADER|SHIFT", action = wezterm.action.SplitPane { direction = "Up", size = { Percent = 50 } } },
+
+  -- Swap Panes (Leader + s)
+  { key = "s", mods = "LEADER", action = wezterm.action.PaneSelect { mode = "SwapWithActive" } },
 
   -- Move Pane Focus (Leader + hjkl)
   { key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Left" },
@@ -111,6 +114,11 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
   else
     title = (tab.tab_index + 1) .. ": " .. title
   end
+
+  -- Truncate title so it fits within max_width without chopping off the powerline arrows
+  local fixed_width = is_first and 13 or 3
+  local available_width = math.max(0, max_width - fixed_width)
+  title = wezterm.truncate_right(title, available_width)
 
   local res = {}
 
