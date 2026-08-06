@@ -42,4 +42,31 @@
       StandardOutPath = "/tmp/etserver.out.log";
     };
   };
+
+  # Run moshi-hook daemon via systemd on Linux
+  systemd.user.services.moshi-hook = lib.mkIf pkgs.stdenv.isLinux {
+    Unit = {
+      Description = "Moshi Hook Daemon";
+      After = [ "network.target" ];
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+    Service = {
+      ExecStart = "${config.home.homeDirectory}/.local/bin/moshi-hook serve";
+      Restart = "always";
+    };
+  };
+
+  # Run moshi-hook daemon via launchd on macOS
+  launchd.agents.moshi-hook = lib.mkIf pkgs.stdenv.isDarwin {
+    enable = true;
+    config = {
+      ProgramArguments = [ "${config.home.homeDirectory}/.local/bin/moshi-hook" "serve" ];
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardErrorPath = "/tmp/moshi-hook.err.log";
+      StandardOutPath = "/tmp/moshi-hook.out.log";
+    };
+  };
 }
