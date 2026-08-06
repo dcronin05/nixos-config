@@ -243,6 +243,13 @@
     '';
   };
 
+  # Ensure Home Manager manages ~/.tmux.conf directly to prevent legacy unmanaged ~/.tmux.conf
+  # files (which may hardcode non-portable shell paths like /usr/bin/zsh) from taking precedence
+  # over Home Manager's XDG tmux configuration (~/.config/tmux/tmux.conf).
+  home.file.".tmux.conf".text = ''
+    source-file ~/.config/tmux/tmux.conf
+  '';
+
   programs.zsh = {
     enable = true;
     envExtra = ''

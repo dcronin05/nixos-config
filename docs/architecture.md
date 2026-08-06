@@ -12,6 +12,7 @@ This file serves two purposes:
 This is the heart of the user experience. By defining all user-facing terminal packages (`htop`, `wget`, `lsd`, `sops`) inside `cli.nix` (which is managed by Home Manager), we ensure that macOS machines receive the exact same packages as NixOS machines.
 - **Do not move CLI tools to `modules/common.nix`**. If you do, macOS will not receive them.
 - **Terminal Agnosticism**: Starship and Zellij are configured using hardcoded 24-bit TrueColor hex codes to ensure they look identical regardless of the host terminal emulator's theme.
+- **Tmux Config Precedence & Portability**: Tmux natively searches `~/.tmux.conf` before checking XDG paths (`~/.config/tmux/tmux.conf`). Legacy unmanaged `~/.tmux.conf` files often hardcode non-portable shell paths (e.g. `/usr/bin/zsh`, which does not exist on macOS). `home/cli.nix` explicitly manages `~/.tmux.conf` to source `~/.config/tmux/tmux.conf`, ensuring cross-platform stability and preventing stray dotfiles from hijacking tmux.
 
 ## The Device Profiles
 The repository provides 4 templates for devices:
