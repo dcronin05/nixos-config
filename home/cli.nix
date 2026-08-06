@@ -29,7 +29,6 @@
   home.stateVersion = "24.05";
   
   home.packages = with pkgs; [
-    lsd
     tree
     vim
     wget
@@ -271,6 +270,10 @@
     };
   };
   
+  programs.lsd = {
+    enable = true;
+  };
+
   programs.git = {
     enable = true;
     settings = {

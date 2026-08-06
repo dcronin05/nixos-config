@@ -46,6 +46,5 @@
 
   programs.zsh.shellAliases = {
     tdocker = "ssh -t dcron@tower docker";
-    ls = "lsd";
   };
 }
