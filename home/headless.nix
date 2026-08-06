@@ -16,6 +16,7 @@
 {
   imports = [
     ./base.nix
+    ./standalone-daemons.nix
     (import ./authorized-keys.nix { })
   ];
 

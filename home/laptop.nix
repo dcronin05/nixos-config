@@ -15,6 +15,7 @@
     ./base.nix
     ./desktop.nix
     ./wezterm.nix
+    ./standalone-daemons.nix
     (import ./authorized-keys.nix { })
   ];
 }
