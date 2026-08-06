@@ -266,13 +266,22 @@
       # Enable case-insensitive completion
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
-      # Set terminal tab title to current directory (unless in tmux or zellij)
-      set_tab_title() {
+      # Set terminal tab title to current directory when idle (unless in tmux/zellij)
+      set_tab_title_precmd() {
         if [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
           print -Pn "\e]0;%~\a"
         fi
       }
-      precmd_functions+=(set_tab_title)
+      precmd_functions+=(set_tab_title_precmd)
+
+      # Set terminal tab title to the running command (unless in tmux/zellij)
+      set_tab_title_preexec() {
+        if [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
+          # $1 contains the raw command line string about to be executed
+          print -Pn "\e]0;$1\a"
+        fi
+      }
+      preexec_functions+=(set_tab_title_preexec)
     '';
     shellAliases = lib.optionalAttrs pkgs.stdenv.isLinux {
       nix-gens = "nixos-rebuild list-generations | (read -r header; echo \"$header\"; tac)";
