@@ -269,7 +269,7 @@
       # Set terminal tab title to current directory when idle (unless in tmux/zellij)
       set_tab_title_precmd() {
         if [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
-          print -Pn "\e]0;%~\a"
+          print -Pn "\e]0;[%m] %~\a"
         fi
       }
       precmd_functions+=(set_tab_title_precmd)
@@ -278,7 +278,7 @@
       set_tab_title_preexec() {
         if [[ -z "$TMUX" ]] && [[ -z "$ZELLIJ" ]]; then
           # $1 contains the raw command line string about to be executed
-          print -Pn "\e]0;$1\a"
+          print -Pn "\e]0;[%m] $1\a"
         fi
       }
       preexec_functions+=(set_tab_title_preexec)
