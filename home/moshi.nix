@@ -17,7 +17,7 @@
   home.activation.moshiHook = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     MOSHI_HOOK="$HOME/.local/bin/moshi-hook"
     if [ ! -x "$MOSHI_HOOK" ]; then
-      export PATH="${pkgs.coreutils}/bin:${pkgs.gnutar}/bin:${pkgs.gzip}/bin:${pkgs.curl}/bin:$PATH"
+      export PATH="${pkgs.coreutils}/bin:${pkgs.gnutar}/bin:${pkgs.gzip}/bin:${pkgs.curl}/bin:${pkgs.gawk}/bin:${pkgs.gnugrep}/bin:$PATH"
       $DRY_RUN_CMD mkdir -p "$HOME/.local/bin"
       $DRY_RUN_CMD curl -fsSL https://getmoshi.app/install.sh | $DRY_RUN_CMD sh
     fi
