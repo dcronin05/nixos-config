@@ -279,10 +279,14 @@
       set_tab_title_precmd() {
         local formatted_dir
         formatted_dir=$(print -Pn "%~")
-        if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
-          print -Pn "\e]0;$formatted_dir\a"
-        else
-          print -Pn "\e]0;[%m] $formatted_dir\a"
+        # Only emit the title sequence if the state actually changed to prevent resize lag
+        if [[ "$_LAST_TAB_TITLE" != "dir:$formatted_dir" ]]; then
+          if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
+            print -Pn "\e]0;$formatted_dir\a"
+          else
+            print -Pn "\e]0;[%m] $formatted_dir\a"
+          fi
+          _LAST_TAB_TITLE="dir:$formatted_dir"
         fi
       }
       precmd_functions+=(set_tab_title_precmd)
@@ -290,10 +294,13 @@
       # Set terminal tab title to the running command
       set_tab_title_preexec() {
         local cmd="$1"
-        if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
-          print -Pn "\e]0;$cmd\a"
-        else
-          print -Pn "\e]0;[%m] $cmd\a"
+        if [[ "$_LAST_TAB_TITLE" != "cmd:$cmd" ]]; then
+          if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
+            print -Pn "\e]0;$cmd\a"
+          else
+            print -Pn "\e]0;[%m] $cmd\a"
+          fi
+          _LAST_TAB_TITLE="cmd:$cmd"
         fi
       }
       preexec_functions+=(set_tab_title_preexec)
