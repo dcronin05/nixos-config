@@ -454,9 +454,8 @@
         # at runtime, meaning no plain text secrets are actually stored in the 0444 accounts.conf.
         unsafe-accounts-conf = true;
       };
-      openers = {
-        "text/html" = "open -a Zen {}";
-      };
+
+
       ui = {
         sidebar-width = 25;
         sort = "-r date";
@@ -470,7 +469,7 @@
       filters = {
         # Restore the default aerc filters that got wiped out by Home Manager
         "text/plain" = "wrap -w 100 | colorize";
-        "text/html" = "w3m -T text/html -dump | colorize";
+        "text/html" = "! w3m -I UTF-8 -T text/html";
         # Safely convert PDF to text using poppler, capped at 10 pages to prevent freezing
         "application/pdf" = "${pkgs.poppler-utils}/bin/pdftotext -l 10 -nopgbrk -q - - | fmt -w 100";
       };
