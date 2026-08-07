@@ -41,6 +41,7 @@
     mosh
     eternal-terminal
     w3m # Used by aerc to render HTML emails in the terminal
+    poppler_utils # Provides pdftotext for the aerc PDF filter
   ];
 
   
@@ -405,6 +406,36 @@
     };
   };
 
+  # Inject custom aerc styleset
+  xdg.configFile."aerc/stylesets/monokai".text = ''
+    # Base
+    *.default = true
+
+    # Message list
+    msglist_unread.fg = #f92672
+    msglist_unread.bold = true
+    msglist_read.default = true
+    msglist_result.fg = #66d9ef
+    msglist_marked.fg = #fd971f
+    msglist_marked.bold = true
+
+    # Sidebar
+    dirlist_default.default = true
+    dirlist_unread.fg = #f92672
+    dirlist_unread.bold = true
+
+    # Title and status bar
+    title.fg = #66d9ef
+    title.bg = #1e1e1e
+    statusline_default.fg = #66d9ef
+    statusline_default.bg = #1e1e1e
+    statusline_default.dim = false
+
+    # Selection highlight
+    *.selected.fg = #1e1e1e
+    *.selected.bg = #fd971f
+  '';
+
   programs.aerc = {
     enable = true;
     extraConfig = {
@@ -421,6 +452,7 @@
         sidebar-width = 25;
         sort = "-r date";
         dirlist-delay = "200ms";
+        styleset-name = "monokai";
       };
       viewer = {
         pager = "less -R";
@@ -430,6 +462,8 @@
         # Restore the default aerc filters that got wiped out by Home Manager
         "text/plain" = "wrap -w 100 | colorize";
         "text/html" = "w3m -T text/html -dump | colorize";
+        # Safely convert PDF to text using poppler, capped at 10 pages to prevent freezing
+        "application/pdf" = "''${pkgs.poppler_utils}/bin/pdftotext -l 10 -nopgbrk -q - - | fmt -w 100";
       };
     };
   };
