@@ -466,6 +466,10 @@
     aerc = {
       # Automatically integrates this email account into the aerc UI
       enable = true;
+      extraAccounts = {
+        # Drastically speeds up folder navigation by caching IMAP headers locally
+        "cache-headers" = true;
+      };
     };
   };
 
