@@ -288,6 +288,12 @@
       # Enable case-insensitive completion
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
+      # Word navigation with Alt+Left/Right (macOS) and Ctrl+Left/Right (Linux)
+      bindkey "^[[1;3D" backward-word
+      bindkey "^[[1;3C" forward-word
+      bindkey "^[[1;5D" backward-word
+      bindkey "^[[1;5C" forward-word
+
       # Set terminal tab title to current directory when idle
       set_tab_title_precmd() {
         local formatted_dir
