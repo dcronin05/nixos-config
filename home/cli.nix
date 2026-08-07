@@ -454,6 +454,9 @@
         # at runtime, meaning no plain text secrets are actually stored in the 0444 accounts.conf.
         unsafe-accounts-conf = true;
       };
+      openers = {
+        "text/html" = "open -a Zen {}";
+      };
       ui = {
         sidebar-width = 25;
         sort = "-r date";
