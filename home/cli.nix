@@ -257,6 +257,9 @@
       export PATH="$HOME/.local/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
       export GEMINI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
       export GOOGLE_AI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
+      export EDITOR="nvim"
+      export VISUAL="nvim"
+      export BROWSER="w3m"
     '';
     initContent = ''
 
@@ -557,9 +560,6 @@
   sops.secrets.fastmail_app_password = {};
 
   home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-    BROWSER = "w3m";
   };
 
   # GitHub CLI and Auto-Authentication
