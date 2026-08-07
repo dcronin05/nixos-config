@@ -474,23 +474,27 @@
     };
   };
 
-  # Fastmail JMAP template (commented out for future use, securely load password from sops)
-  /*
+  # Fastmail JMAP Account
   accounts.email.accounts.fastmail = {
     primary = false;
-    address = "daniel@dcron.in";
-    userName = "daniel@dcron.in";
+    address = "daniel@cronin.one";
+    userName = "daniel@cronin.one";
     realName = "Daniel Cronin";
+    flavor = "fastmail.com";
     passwordCommand = "cat ${config.sops.secrets.fastmail_app_password.path}";
+    
     aerc = {
       enable = true;
       extraAccounts = {
-        source = "jmap://daniel%40dcron.in@api.fastmail.com/jmap/";
-        outgoing = "smtp+plain://daniel%40dcron.in@smtp.fastmail.com:465";
+        source = "jmap+oauthbearer://daniel%40cronin.one@api.fastmail.com/.well-known/jmap";
+        outgoing = "jmap+oauthbearer://";
+        
+        default = "INBOX";
+        copy-to = "Sent";
       };
     };
   };
-  */
+
   # Deploy the OAuth2 python script into aerc's config folder
   home.file."${if pkgs.stdenv.isDarwin then "Library/Preferences" else ".config"}/aerc/mutt_oauth2.py" = {
     source = ../scripts/mutt_oauth2.py;
@@ -548,6 +552,7 @@
   sops.secrets.github_token = {};
   sops.secrets.google_ai_api_key = {};
   sops.secrets.gmail_app_password = {};
+  sops.secrets.fastmail_app_password = {};
 
   home.sessionVariables = {
   };
