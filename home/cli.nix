@@ -469,10 +469,6 @@
       extraAccounts = {
         # Drastically speeds up folder navigation by caching IMAP headers locally
         "cache-headers" = "true";
-        # Configure native folder routing so aerc knows where to move things
-        "archive" = "[Gmail]/All Mail";
-        "postpone" = "[Gmail]/Drafts";
-        "copy-to" = "[Gmail]/Sent Mail";
       };
     };
   };
