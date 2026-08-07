@@ -404,11 +404,70 @@
     };
   };
 
+  programs.aerc = {
+    enable = true;
+    extraConfig = {
+      general = {
+        -- Because Home Manager symlinks configuration files into the read-only Nix Store,
+        -- aerc's default strict permission check (which requires 0600 permissions on accounts.conf)
+        -- fails and prevents aerc from starting.
+        -- We bypass this check using unsafe-accounts-conf = true. This is completely safe
+        -- here because we are using passwordCommand to dynamically pull the password from SOPS
+        -- at runtime, meaning no plain text secrets are actually stored in the 0444 accounts.conf.
+        unsafe-accounts-conf = true;
+      };
+      ui = {
+        sidebar-width = 25;
+        sort = "-r date";
+        dirlist-delay = "200ms";
+      };
+      viewer = {
+        pager = "less -R";
+      };
+    };
+  };
+
+  # Fastmail JMAP template (commented out for future use, securely load password from sops)
+  /*
+  accounts.email.accounts.fastmail = {
+    primary = false;
+    address = "daniel@dcron.in";
+    userName = "daniel@dcron.in";
+    realName = "Daniel Cronin";
+    passwordCommand = "cat ${config.sops.secrets.fastmail_app_password.path}";
+    aerc = {
+      enable = true;
+      extraAccounts = {
+        source = "jmap://daniel%40dcron.in@api.fastmail.com/jmap/";
+        outgoing = "smtp+plain://daniel%40dcron.in@smtp.fastmail.com:465";
+      };
+    };
+  };
+  */
+
+  accounts.email.accounts.gmail = {
+    primary = true;
+    # Using the 'gmail.com' flavor auto-configures standard IMAP/SMTP endpoints for Gmail
+    flavor = "gmail.com";
+    address = "dcronin05@gmail.com";
+    userName = "dcronin05@gmail.com";
+    realName = "Daniel Cronin";
+    # Google requires an App Password for IMAP/SMTP (standard passwords will not work).
+    # Save it to your secrets.yaml file!
+    # The command runs at runtime so the plain text password is never baked into the Nix store
+    passwordCommand = "cat ${config.sops.secrets.gmail_app_password.path}";
+    aerc = {
+      # Automatically integrates this email account into the aerc UI
+      enable = true;
+    };
+  };
+
   # SOPS Configuration for User Space
   sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
   sops.secrets.github_token = {};
   sops.secrets.google_ai_api_key = {};
+  sops.secrets.gmail_app_password = {};
 
   home.sessionVariables = {
   };

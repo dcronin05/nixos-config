@@ -44,35 +44,50 @@ config.window_padding = {
 config.initial_cols = 100
 config.initial_rows = 35
 
+-- Automatically close the window without prompting when the last pane/tab exits
+config.window_close_confirmation = 'NeverPrompt'
+
 -- 3. Keybindings
--- Leader key setup (Ctrl + a)
-config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+-- We define a named custom event here so that WezTerm can link it cleanly to BOTH
+-- a keyboard shortcut and a Command Palette entry. If we used an inline anonymous function,
+-- WezTerm would auto-generate an ugly generic name (e.g., 'user-defined-0') in the palette.
+wezterm.on('export-scrollback', function(window, pane)
+  -- Extract all text currently in the terminal pane buffer
+  local text = pane:get_lines_as_text()
+  -- Define a static filename so we don't clutter the home directory with endless files
+  local name = "wezterm-scrollback.txt"
+  local path = os.getenv("HOME") .. "/" .. name
+  
+  local f = io.open(path, 'w+')
+  if f then
+    f:write(text)
+    f:flush()
+    f:close()
+    
+    -- Trigger a custom global state update to tell our custom status bar to display a notification.
+    -- (We use this instead of window:toast_notification because Nix-installed WezTerm binaries
+    -- lack macOS App Bundles, which causes macOS to silently swallow OS-level toasts).
+    wezterm.GLOBAL.notification = "Saved " .. name
+    wezterm.GLOBAL.notification_expires = os.time() + 4
+  end
+end)
+
+-- Inject our nicely named command into the WezTerm Command Palette (Ctrl+Shift+P)
+wezterm.on('augment-command-palette', function(window, pane)
+  return {
+    {
+      brief = 'Export Terminal Text/Scrollback',
+      icon = 'md_export',
+      -- We reference the explicit event name here so it links up with the shortcut below
+      action = wezterm.action.EmitEvent('export-scrollback'),
+    },
+  }
+end)
 
 config.keys = {
-  -- Split Panes (Directional)
-  { key = "H", mods = "LEADER|SHIFT", action = wezterm.action.SplitPane { direction = "Left", size = { Percent = 50 } } },
-  { key = "L", mods = "LEADER|SHIFT", action = wezterm.action.SplitPane { direction = "Right", size = { Percent = 50 } } },
-  { key = "J", mods = "LEADER|SHIFT", action = wezterm.action.SplitPane { direction = "Down", size = { Percent = 50 } } },
-  { key = "K", mods = "LEADER|SHIFT", action = wezterm.action.SplitPane { direction = "Up", size = { Percent = 50 } } },
-
-  -- Swap Panes (Leader + s)
-  { key = "s", mods = "LEADER", action = wezterm.action.PaneSelect { mode = "SwapWithActive" } },
-
-  -- Move Pane Focus (Leader + hjkl)
-  { key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Left" },
-  { key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Right" },
-  { key = "j", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Down" },
-  { key = "k", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Up" },
-
-  -- Tab & Window Management
-  { key = "c", mods = "LEADER", action = wezterm.action.SpawnTab "CurrentPaneDomain" },
-  { key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane { confirm = true } },
-
-  -- Workspace & Multiplexer Domain Launcher Menu
-  { key = "w", mods = "LEADER", action = wezterm.action.ShowLauncherArgs { flags = "FUZZY|WORKSPACES|DOMAINS" } },
-
-  -- Fullscreen (macOS standard)
-  { key = "f", mods = "CTRL|CMD", action = wezterm.action.ToggleFullScreen },
+  -- Export scrollback to text file (Ctrl + Shift + E)
+  -- We removed the custom WezTerm pane navigation shortcuts previously to restore default Vim bindings
+  { key = "e", mods = "CTRL|SHIFT", action = wezterm.action.EmitEvent('export-scrollback') },
 }
 
 -- Powerline Glyphs
@@ -141,21 +156,36 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
   return res
 end)
 
--- 5. Right Status Bar (Zellij Host / Status Pill)
+-- 5. Right Status Bar (Zellij Host / Status Pill & Custom Notifications)
 wezterm.on("update-status", function(window, pane)
   local hostname = wezterm.hostname():match("^([^.]+)") or wezterm.hostname()
   
-  local status = {
-    { Background = { Color = TAB_BAR_BG } },
-    { Foreground = { Color = ACTIVE_BG } },
-    { Text = SOLID_LEFT_ARROW },
-    { Background = { Color = ACTIVE_BG } },
-    { Foreground = { Color = ACTIVE_FG } },
-    { Attribute = { Intensity = "Bold" } },
-    { Text = " " .. hostname .. " " },
-  }
+  local status_elements = {}
+  local is_notifying = wezterm.GLOBAL.notification_expires and os.time() < wezterm.GLOBAL.notification_expires
 
-  window:set_right_status(wezterm.format(status))
+  -- Inject our custom internal notification if it is active
+  if is_notifying then
+    table.insert(status_elements, { Background = { Color = TAB_BAR_BG } })
+    table.insert(status_elements, { Foreground = { Color = "#fd971f" } }) -- Orange
+    table.insert(status_elements, { Text = SOLID_LEFT_ARROW })
+    table.insert(status_elements, { Background = { Color = "#fd971f" } })
+    table.insert(status_elements, { Foreground = { Color = TAB_BAR_BG } })
+    table.insert(status_elements, { Attribute = { Intensity = "Bold" } })
+    table.insert(status_elements, { Text = " " .. wezterm.GLOBAL.notification .. " " })
+  end
+
+  -- Hostname block (blends seamlessly if notification is active)
+  local hostname_arrow_bg = is_notifying and "#fd971f" or TAB_BAR_BG
+
+  table.insert(status_elements, { Background = { Color = hostname_arrow_bg } })
+  table.insert(status_elements, { Foreground = { Color = ACTIVE_BG } })
+  table.insert(status_elements, { Text = SOLID_LEFT_ARROW })
+  table.insert(status_elements, { Background = { Color = ACTIVE_BG } })
+  table.insert(status_elements, { Foreground = { Color = ACTIVE_FG } })
+  table.insert(status_elements, { Attribute = { Intensity = "Bold" } })
+  table.insert(status_elements, { Text = " " .. hostname .. " " })
+
+  window:set_right_status(wezterm.format(status_elements))
 end)
 
 return config
