@@ -464,7 +464,7 @@
       };
       viewer = {
         pager = "less -R";
-        alternatives = "text/plain,text/html";
+        alternatives = "text/html,text/plain";
       };
       filters = {
         # Restore the default aerc filters that got wiped out by Home Manager
@@ -557,6 +557,8 @@
   sops.secrets.fastmail_app_password = {};
 
   home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   # GitHub CLI and Auto-Authentication
