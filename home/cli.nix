@@ -408,12 +408,12 @@
     enable = true;
     extraConfig = {
       general = {
-        -- Because Home Manager symlinks configuration files into the read-only Nix Store,
-        -- aerc's default strict permission check (which requires 0600 permissions on accounts.conf)
-        -- fails and prevents aerc from starting.
-        -- We bypass this check using unsafe-accounts-conf = true. This is completely safe
-        -- here because we are using passwordCommand to dynamically pull the password from SOPS
-        -- at runtime, meaning no plain text secrets are actually stored in the 0444 accounts.conf.
+        # Because Home Manager symlinks configuration files into the read-only Nix Store,
+        # aerc's default strict permission check (which requires 0600 permissions on accounts.conf)
+        # fails and prevents aerc from starting.
+        # We bypass this check using unsafe-accounts-conf = true. This is completely safe
+        # here because we are using passwordCommand to dynamically pull the password from SOPS
+        # at runtime, meaning no plain text secrets are actually stored in the 0444 accounts.conf.
         unsafe-accounts-conf = true;
       };
       ui = {
