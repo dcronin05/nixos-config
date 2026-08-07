@@ -281,7 +281,9 @@
         formatted_dir=$(print -Pn "%~")
         # Only emit the title sequence if the state actually changed to prevent resize lag
         if [[ "$_LAST_TAB_TITLE" != "dir:$formatted_dir" ]]; then
-          if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
+          if [[ -n "$TMUX" ]]; then
+            print -Pn "\ek$formatted_dir\e\\"
+          elif [[ -n "$ZELLIJ" ]]; then
             print -Pn "\e]0;$formatted_dir\a"
           else
             print -Pn "\e]0;[%m] $formatted_dir\a"
@@ -295,7 +297,9 @@
       set_tab_title_preexec() {
         local cmd="$1"
         if [[ "$_LAST_TAB_TITLE" != "cmd:$cmd" ]]; then
-          if [[ -n "$TMUX" ]] || [[ -n "$ZELLIJ" ]]; then
+          if [[ -n "$TMUX" ]]; then
+            print -Pn "\ek$cmd\e\\"
+          elif [[ -n "$ZELLIJ" ]]; then
             print -Pn "\e]0;$cmd\a"
           else
             print -Pn "\e]0;[%m] $cmd\a"
