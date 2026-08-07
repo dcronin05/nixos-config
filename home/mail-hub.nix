@@ -38,6 +38,24 @@
 { config, pkgs, lib, ... }:
 
 let
+  # TIMER OFF until the initial-sync strategy is settled. Flip to true when ready.
+  #
+  # Not a placeholder -- the current channel set is known-wrong for Gmail. Gmail's
+  # IMAP INBOX is 307,361 messages, because the category tabs (Promotions 183k,
+  # Updates 95k, Social 19k) live INSIDE INBOX rather than being folders of their
+  # own. INBOX therefore overlaps All Mail almost entirely, so these channels
+  # would pull ~672k messages to store ~365k unique ones -- double the bandwidth
+  # and disk for no gain, against a quota already returning [OVERQUOTA].
+  #
+  # Masking the unit is not an alternative: home-manager owns
+  # ~/.config/systemd/user/mbsync.timer as a nix store symlink, so `systemctl
+  # --user mask` refuses, and `disable` is silently reverted by the next
+  # activation. Disabling the service here is the only durable off switch.
+  #
+  # `programs.mbsync` stays enabled, so the binary and isyncrc remain and manual
+  # runs still work -- only the scheduled runs stop.
+  timerEnabled = false;
+
   # How often the sync timer fires. Phase 4 may replace polling with goimapnotify
   # IDLE push, at which point this only governs the safety-net run.
   syncFrequency = "*:0/5";
@@ -119,7 +137,7 @@ in
   };
 
   services.mbsync = {
-    enable = true;
+    enable = timerEnabled;
     frequency = syncFrequency;
     postExec = reindex;
   };
