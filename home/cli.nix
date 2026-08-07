@@ -40,6 +40,7 @@
     sops
     mosh
     eternal-terminal
+    w3m # Used by aerc to render HTML emails in the terminal
   ];
 
   
@@ -423,6 +424,12 @@
       };
       viewer = {
         pager = "less -R";
+        alternatives = "text/plain,text/html";
+      };
+      filters = {
+        # Restore the default aerc filters that got wiped out by Home Manager
+        "text/plain" = "wrap -w 100 | colorize";
+        "text/html" = "w3m -T text/html -dump | colorize";
       };
     };
   };
