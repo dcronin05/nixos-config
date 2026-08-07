@@ -41,7 +41,7 @@
     mosh
     eternal-terminal
     w3m # Used by aerc to render HTML emails in the terminal
-    poppler_utils # Provides pdftotext for the aerc PDF filter
+    poppler-utils # Provides pdftotext for the aerc PDF filter
   ];
 
   
@@ -463,7 +463,7 @@
         "text/plain" = "wrap -w 100 | colorize";
         "text/html" = "w3m -T text/html -dump | colorize";
         # Safely convert PDF to text using poppler, capped at 10 pages to prevent freezing
-        "application/pdf" = "''${pkgs.poppler_utils}/bin/pdftotext -l 10 -nopgbrk -q - - | fmt -w 100";
+        "application/pdf" = "''${pkgs.poppler-utils}/bin/pdftotext -l 10 -nopgbrk -q - - | fmt -w 100";
       };
     };
   };
