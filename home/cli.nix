@@ -272,6 +272,17 @@
         fi
       fi
 
+      # Auto-name default Tmux sessions based on the initial directory
+      if [[ -n "$TMUX" ]]; then
+        local current_session
+        current_session=$(tmux display-message -p '#S' 2>/dev/null)
+        # If the session is just a number (the default tmux naming scheme)
+        if [[ "$current_session" =~ ^[0-9]+$ ]]; then
+          local dir_name=$(basename "$PWD")
+          tmux rename-session "$dir_name" 2>/dev/null || true
+        fi
+      fi
+
       # Enable case-insensitive completion
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
