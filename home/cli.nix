@@ -331,7 +331,11 @@
       }
       preexec_functions+=(set_tab_title_preexec)
     '';
-    shellAliases = lib.optionalAttrs pkgs.stdenv.isLinux {
+    shellAliases = {
+      # Show the process that spawned this shell -- useful for working out which
+      # terminal, multiplexer or agent actually launched you.
+      parent = "ps -f -p $(ps -o ppid= -p $$)";
+    } // lib.optionalAttrs pkgs.stdenv.isLinux {
       nix-gens = "nixos-rebuild list-generations | (read -r header; echo \"$header\"; tac)";
     };
   };
