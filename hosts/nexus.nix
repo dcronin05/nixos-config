@@ -15,6 +15,19 @@
   # Enable Hyper-V Guest Services
   virtualisation.hypervGuest.enable = true;
 
+  # Keep this user's systemd instance alive without an active login session.
+  #
+  # Required by the mail hub (see home/mail-hub.nix). Mail sync is inherently
+  # user-scoped -- the user's Maildir, the user's credentials, the user's
+  # accounts.email declarations -- so it runs as a systemd USER timer. But a user
+  # manager is torn down when the last session ends, which on a headless server
+  # means the timer only fires while someone happens to be SSH'd in, and any sync
+  # in flight is killed on logout.
+  #
+  # Set here rather than in modules/common.nix because only the hub needs it;
+  # common.nix is for what EVERY NixOS host requires.
+  users.users.dcronin05.linger = true;
+
   sops.secrets.tailscale_state = {};
 
   # Restore Tailscale state on first boot
