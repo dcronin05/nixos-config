@@ -406,8 +406,8 @@
     };
   };
 
-  # Inject custom aerc styleset
-  xdg.configFile."aerc/stylesets/monokai".text = ''
+  # Inject custom aerc styleset into the correct OS-specific directory
+  home.file."${if pkgs.stdenv.isDarwin then "Library/Preferences" else ".config"}/aerc/stylesets/monokai".text = ''
     # Base
     *.default = true
 
