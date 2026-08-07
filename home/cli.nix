@@ -253,6 +253,19 @@
 
   programs.zsh = {
     enable = true;
+
+    # State the keymap explicitly. Zsh otherwise INFERS it at startup: if $VISUAL
+    # or $EDITOR contains the substring "vi", it selects the vi keymap instead of
+    # emacs. "nvim" contains "vi".
+    #
+    # This is why Ctrl+R silently stopped doing bck-i-search. Nothing ever asked
+    # for vi mode -- moving EDITOR/VISUAL into envExtra (.zshenv, sourced BEFORE
+    # .zshrc) simply meant zsh could see them at keymap-selection time, where
+    # previously they arrived later via hm-session-vars.sh inside initContent.
+    # In viins, ^R is `redisplay`; history-incremental-search-backward is an
+    # emacs-keymap binding.
+    defaultKeymap = "emacs";
+
     envExtra = ''
       export PATH="$HOME/.local/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
       export GEMINI_API_KEY="$(cat ${config.sops.secrets.google_ai_api_key.path})"
