@@ -463,7 +463,7 @@
         "text/plain" = "wrap -w 100 | colorize";
         "text/html" = "w3m -T text/html -dump | colorize";
         # Safely convert PDF to text using poppler, capped at 10 pages to prevent freezing
-        "application/pdf" = "''${pkgs.poppler-utils}/bin/pdftotext -l 10 -nopgbrk -q - - | fmt -w 100";
+        "application/pdf" = "${pkgs.poppler-utils}/bin/pdftotext -l 10 -nopgbrk -q - - | fmt -w 100";
       };
     };
   };
@@ -485,6 +485,35 @@
     };
   };
   */
+  # Deploy the OAuth2 python script into aerc's config folder
+  home.file."${if pkgs.stdenv.isDarwin then "Library/Preferences" else ".config"}/aerc/mutt_oauth2.py" = {
+    source = ../scripts/mutt_oauth2.py;
+    executable = true;
+  };
+
+  # Microsoft Live Account
+  accounts.email.accounts.live = {
+    primary = false;
+    address = "dcronin05@live.com";
+    userName = "dcronin05@live.com";
+    realName = "Daniel Cronin";
+    flavor = "outlook.office365.com";
+
+    aerc = {
+      enable = true;
+      extraAccounts = {
+        source = "imaps+xoauth2://dcronin05%40live.com@outlook.office365.com:993";
+        source-cred-cmd = "python3 ${config.home.homeDirectory}/${if pkgs.stdenv.isDarwin then "Library/Preferences" else ".config"}/aerc/mutt_oauth2.py ${config.home.homeDirectory}/.live-token";
+        outgoing = "smtp+xoauth2://dcronin05%40live.com@smtp-mail.outlook.com:587";
+        outgoing-cred-cmd = "python3 ${config.home.homeDirectory}/${if pkgs.stdenv.isDarwin then "Library/Preferences" else ".config"}/aerc/mutt_oauth2.py ${config.home.homeDirectory}/.live-token";
+        
+        default = "INBOX";
+        copy-to = "Sent Items";
+        cache-headers = "true";
+      };
+    };
+  };
+
 
   accounts.email.accounts.gmail = {
     primary = true;
