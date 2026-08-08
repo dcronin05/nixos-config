@@ -23,6 +23,10 @@
     fi
   '';
 
+  # Named to match what the Moshi app calls it. Note it is ACCOUNT-level and
+  # shared by every host -- there is one key here, not one per device. Each
+  # machine derives its own host ID and host secret at pair time, and those stay
+  # local (~/.config/moshi/secrets.json), never in the vault.
   sops.secrets.moshi_device_token = { };
 
   # Downloading the binary is not enough to get notifications. Two further steps
