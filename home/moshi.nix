@@ -50,9 +50,52 @@
   home.activation.moshiPair = lib.hm.dag.entryAfter [ "moshiHook" "sops-nix" ] ''
     MOSHI_HOOK="$HOME/.local/bin/moshi-hook"
     TOKEN_FILE="${config.sops.secrets.moshi_device_token.path}"
-    if [ -x "$MOSHI_HOOK" ] && [ -r "$TOKEN_FILE" ] && [ ! -f "$HOME/.config/moshi/secrets.json" ]; then
-      $DRY_RUN_CMD "$MOSHI_HOOK" pair --store file --token "$(cat "$TOKEN_FILE")"
-      $DRY_RUN_CMD "$MOSHI_HOOK" install
+    if [ -x "$MOSHI_HOOK" ]; then
+      # Pair only once -- deriving a fresh host identity on every activation would
+      # churn hosts in the app.
+      if [ -r "$TOKEN_FILE" ] && [ ! -f "$HOME/.config/moshi/secrets.json" ]; then
+        $DRY_RUN_CMD "$MOSHI_HOOK" pair --store file --token "$(cat "$TOKEN_FILE")"
+      fi
+      # Install hooks on EVERY activation. It is idempotent (reports "current"
+      # for anything already wired) and self-healing: it picks up agent CLIs
+      # installed after pairing, and repairs stale binary paths. This machine had
+      # hooks pointing at a Homebrew copy of moshi-hook while the daemon ran the
+      # one under ~/.local/bin -- exactly the drift this prevents.
+      $DRY_RUN_CMD "$MOSHI_HOOK" install || true
     fi
   '';
+
+  # The daemon lives here rather than in `standalone-daemons.nix` so this module
+  # owns the whole lifecycle and reaches every host. standalone-daemons.nix is
+  # imported only by the standalone profiles, which excluded `nexus` -- so nexus
+  # paired but never ran. moshi-hook binds a per-user unix socket rather than a
+  # privileged port, so the etserver conflict motivating that module is not an
+  # issue here.
+  #
+  # On NixOS this is a systemd USER service, so it needs `users.users.<n>.linger`
+  # to run without an active login session (already set for nexus).
+  systemd.user.services.moshi-hook = lib.mkIf pkgs.stdenv.isLinux {
+    Unit = {
+      Description = "Moshi Hook Daemon";
+      After = [ "network.target" ];
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+    Service = {
+      ExecStart = "${config.home.homeDirectory}/.local/bin/moshi-hook serve";
+      Restart = "always";
+    };
+  };
+
+  launchd.agents.moshi-hook = lib.mkIf pkgs.stdenv.isDarwin {
+    enable = true;
+    config = {
+      ProgramArguments = [ "${config.home.homeDirectory}/.local/bin/moshi-hook" "serve" ];
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardErrorPath = "/tmp/moshi-hook.err.log";
+      StandardOutPath = "/tmp/moshi-hook.out.log";
+    };
+  };
 }

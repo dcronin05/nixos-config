@@ -43,30 +43,11 @@
     };
   };
 
-  # Run moshi-hook daemon via systemd on Linux
-  systemd.user.services.moshi-hook = lib.mkIf pkgs.stdenv.isLinux {
-    Unit = {
-      Description = "Moshi Hook Daemon";
-      After = [ "network.target" ];
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-    Service = {
-      ExecStart = "${config.home.homeDirectory}/.local/bin/moshi-hook serve";
-      Restart = "always";
-    };
-  };
-
-  # Run moshi-hook daemon via launchd on macOS
-  launchd.agents.moshi-hook = lib.mkIf pkgs.stdenv.isDarwin {
-    enable = true;
-    config = {
-      ProgramArguments = [ "${config.home.homeDirectory}/.local/bin/moshi-hook" "serve" ];
-      KeepAlive = true;
-      RunAtLoad = true;
-      StandardErrorPath = "/tmp/moshi-hook.err.log";
-      StandardOutPath = "/tmp/moshi-hook.out.log";
-    };
-  };
+  # NOTE: the moshi-hook daemon used to live here. It moved to `home/moshi.nix`
+  # so that module owns the whole lifecycle (fetch, pair, install hooks, run) and
+  # so it reaches EVERY host. This file is imported only by standalone Home
+  # Manager profiles, which excluded `nexus` -- meaning nexus downloaded and
+  # paired moshi-hook but never ran it. moshi-hook is safe to run universally
+  # because it binds a per-user unix socket, not a privileged port, so the
+  # etserver conflict that motivates this module does not apply to it.
 }
